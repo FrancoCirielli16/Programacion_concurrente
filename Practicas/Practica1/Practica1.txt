@@ -1,0 +1,45 @@
+1:Para el siguiente programa concurrente suponga que todas las variables están inicializadas en 0 antes de empezar. 
+Indique cual/es de las siguientes opciones son verdaderas:
+    
+      
+a) En algún caso el valor de x al terminar el programa es 56.
+    
+    Verdadero. Es posible que P1 se ejecute primero, dándole a x el valor de 10, luego se ejecute P2, dándole a x el valor de 11, y por último se ejecute P3, dándole a x el valor de 56.
+    
+b)En algún caso el valor de x al terminar el programa es 22.
+    
+    Se deben descomponer las instrucciones que involucran variables compartidas de los procesos en acciones atómicas de grano fino.
+    
+    La instrucción de P1 se puede descomponer en:
+    
+    
+    1 - Load y, reg1
+    2 - Add 2, reg1
+    3 - Store reg1, x
+    
+    
+    La instrucción de P2 se puede descomponer en:
+    
+    
+    4 - Load x, reg2
+    5 - Add 1, reg2
+    6 - Store reg2, x
+
+    
+    La instrucción de P3 se puede descomponer en:
+    
+
+    7 - Load x, Reg3
+    8 - Load x, Reg4
+    9 - Multiply Reg3,3,Reg3
+    10 - Multiply Reg4,2,Reg4
+    11 - Add Reg3,Reg4,Reg5
+    12 - Add 1,Reg5
+    13 - Store x,Reg5
+
+    
+    Es posible que x tenga el valor 22 si el orden de las instrucciones es: 1-2-7-3-8-9-10-11-12-13-4-5-6
+    
+c) En algún caso el valor de x al terminar el programa es 23.
+    
+    Teniendo las mismas acciones atómicas, es posible que x tenga el valor 23 si el orden de las instrucciones es: 1-2-7-3-4-5-6-8-9-10-11-12-13

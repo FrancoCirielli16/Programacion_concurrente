@@ -19,11 +19,9 @@ a)
 impresora = False;
 
 proccess Persona [i=1 to N]{
-                                <while(imp) skip;>
+                                <await(impresora) impresora=False>
+                                Persona[i].Imprimir(documento)
                                 <impresora = True;>
-                                Imprimir(documento)
-                                <impresora = False;>
-
                         }
 
 
@@ -34,18 +32,18 @@ b)
 cola C;
 siguiente = -1;
 
-1,2,3,4
+
 
 
 proccess Persona [i=1 to N]{
                                 <if(siguiente==-1) siguiente = i;
                                 else
-                                        AgregarEnCola(C,i)>;
+                                        cola.push(i)>;
                                 <await(siguiente == i)>;
-                                Imprimir(documento)
-                                <if(empty(C))siguiente=-1
+                                Persona[i].Imprimir(documento)
+                                <if(cola.empty())siguiente=-1
                                 else
-                                        siguiente=Sacar(C)>;
+                                        siguiente=cola.pop(i)>;
 
                         }
 
@@ -53,8 +51,19 @@ proccess Persona [i=1 to N]{
 
 c)
 
-//Chequear
 
+
+array = [];
+siguiente = -1;
+
+Process Personas[id:0..N-1]
+{
+	array.append(id);
+	<siguiente = min(array)> # funcion que devuelve el id minimo
+	<await siguiente == id>
+	Personas[id].Imprimir(documento);
+	array.remove(siguiente); # la persona deja de utilizar la impresora
+}
 
 
 
