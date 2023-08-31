@@ -5,15 +5,10 @@ en algún momento), indicar si cumple con las 4 condiciones requeridas:
 
 En este problema las 4 condiciones se cumplen
 
-Ausencia de deadlock: Esto NO puede darse ya que en ningun momento va a ser posible que SC1 Y SC2 entren a la SC al mismo tiempo
-
-
-Ausencia de demora innecesaria: si SC1 está fuera de su SC o terminó, turno es igual a 2;
-si SC2 está tratando de entrar a SC y no puede, turno es igual a 1; 
-no hay demora innecesaria.
-
-
-Eventual Entrada:
+- Exclusión mutua: esta condición se cumple ya que a lo sumo un proceso esta en su SC, no se va a dar el caso donde ambos procesos estén ejecutando instrucciones de SC.
+- Ausencia de Deadlock: esta condición se cumple porque por lo menos un proceso tiene éxito entrando su SC.
+- Ausencia de Demora Innecesaria: esta condición no se cumple, ya que es posible que un proceso quiera acceder 2 veces seguidas a su SC, pero el otro proceso no terminó de ejecutar las instrucciones en su turno, por lo que va a tener que esperar a que se termine el turno del otro, causando demora innecesaria.
+-Eventual Entrada:
 • Si SC1 está tratando de entrar a su SC y no puede, SC2 está en SC (turno == 2). El
 proceso SC2 que está en SC eventualmente sale → turno sera igual 1  y la guarda del proceso SC1 sera false ya que turno es igual a 1 dandole la entrada a su SC.
 • Análogamente para SC1.

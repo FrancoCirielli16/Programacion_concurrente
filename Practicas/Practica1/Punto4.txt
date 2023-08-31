@@ -6,8 +6,9 @@ cant=5;
 recursos:cola;
 
 proccess PROCESOX {
-                    <await (cant>0);pop(recursos,r);cant--;>
+                    <await (cant>0);pop(recursos,r);cant--;
                     Utiliza recurso
-                    push(recursos,r);cant++
+                    push(recursos,r);cant++>
+                    
                 
                 }
