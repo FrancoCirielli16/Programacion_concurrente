@@ -1,0 +1,22 @@
+6. Dada la siguiente solución para el Problema de la Sección Crítica entre dos procesos
+(suponiendo que tanto SC como SNC son segmentos de código finitos, es decir que terminan
+en algún momento), indicar si cumple con las 4 condiciones requeridas:
+
+
+En este problema las 4 condiciones se cumplen
+
+Ausencia de deadlock: Esto NO puede darse ya que en ningun momento va a ser posible que SC1 Y SC2 entren a la SC al mismo tiempo
+
+
+Ausencia de demora innecesaria: si SC1 está fuera de su SC o terminó, turno es igual a 2;
+si SC2 está tratando de entrar a SC y no puede, turno es igual a 1; 
+no hay demora innecesaria.
+
+
+Eventual Entrada:
+• Si SC1 está tratando de entrar a su SC y no puede, SC2 está en SC (turno == 2). El
+proceso SC2 que está en SC eventualmente sale → turno sera igual 1  y la guarda del proceso SC1 sera false ya que turno es igual a 1 dandole la entrada a su SC.
+• Análogamente para SC1.
+• Si los procesos corren en procesadores iguales y el tiempo de acceso a SC es finito,
+las guardas son true con infinita frecuencia.
+Se garantiza la eventual entrada con una política de scheduling fuertemente fair. 

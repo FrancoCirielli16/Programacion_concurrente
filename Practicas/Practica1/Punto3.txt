@@ -1,0 +1,32 @@
+a) Indicar si el siguiente código funciona para resolver el problema de
+Productor/Consumidor con un buffer de tamaño N. En caso de no funcionar, debe
+hacer las modificaciones necesarias.
+
+El codigo puede fallar ya que cuando el Productor quiera cargar en el buffer un elemento, puede ser que el Consumidor quiera sacar del buffer un elemento y no se alla terminado de asignar el elemento al buffer debido a que no es atomica esa asignacion. 
+Otra forma de solucionarlo seria asignar el elemento y luego sumar a cantidad asi se evita que el Consumidor pueda obtener un elemento del buffer sin que este cargado
+
+
+b)
+
+int cant = 0;   int buffer[N];
+
+
+Process Productor[id 1 to P]::{
+    int pri_vacia = 0;
+    while (true){ 
+        produce elemento
+        <await (cant < N); buffer[pri_vacia] = elemento>;
+        cant++
+        pri_vacia = (pri_vacia + 1) mod N;
+    }
+}
+
+Process Consumidor[id 1 to C]::{ 
+    int pri_ocupada = 0;
+    while (true){ 
+        <await (cant > 0); cant-- >
+        elemento = buffer[pri_ocupada];
+        pri_ocupada = (pri_ocupada + 1) mod N;
+        consume elemento
+    }
+}

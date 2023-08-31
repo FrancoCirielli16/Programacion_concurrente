@@ -1,0 +1,10 @@
+2. Realice una solución concurrente de grano grueso (utilizando <> y/o <await B; S>) para el
+siguiente problema. Dado un número N verifique cuántas veces aparece ese número en un
+arreglo de longitud M. Escriba las pre-condiciones que considere necesarias.
+
+
+int cont = 0;
+int vec[1:M] = (M:randms());
+N=x;
+
+proccess contar [i=1 to M]{IF N==vec[i] <cont ++;>}

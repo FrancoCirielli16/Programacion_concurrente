@@ -1,0 +1,86 @@
+5. En cada ítem debe realizar una solución concurrente de grano grueso (utilizando <> y/o
+<await B; S>) para el siguiente problema, teniendo en cuenta las condiciones indicadas en el
+item. Existen N personas que deben imprimir un trabajo cada una.
+a) Implemente una solución suponiendo que existe una única impresora compartida por
+todas las personas, y las mismas la deben usar de a una persona a la vez, sin importar el
+orden. Existe una función Imprimir(documento) llamada por la persona que simula el uso
+de la impresora. Sólo se deben usar los procesos que representan a las Personas.
+b) Modifique la solución de (a) para el caso en que se deba respetar el orden de llegada.
+c) Modifique la solución de (a) para el caso en que se deba respetar el orden dado por el
+identificador del proceso (cuando está libre la impresora, de los procesos que han
+solicitado su uso la debe usar el que tenga menor identificador).
+d) Modifique la solución de (b) para el caso en que además hay un proceso Coordinador que
+le indica a cada persona que es su turno de usar la impresora.
+
+
+a)
+
+
+impresora = False;
+
+proccess Persona [i=1 to N]{
+                                <while(imp) skip;>
+                                <impresora = True;>
+                                Imprimir(documento)
+                                <impresora = False;>
+
+                        }
+
+
+
+
+b)
+
+cola C;
+siguiente = -1;
+
+1,2,3,4
+
+
+proccess Persona [i=1 to N]{
+                                <if(siguiente==-1) siguiente = i;
+                                else
+                                        AgregarEnCola(C,i)>;
+                                <await(siguiente == i)>;
+                                Imprimir(documento)
+                                <if(empty(C))siguiente=-1
+                                else
+                                        siguiente=Sacar(C)>;
+
+                        }
+
+
+
+c)
+
+//Chequear
+
+
+
+
+d)
+
+
+int arribo[1:n] = ([n] 0);
+continuar[1:n] = ([n] 0);
+
+
+process Persona[i=1 to n]
+                { 
+                código para implementar la tarea i;
+                arribo[i] = 1;
+                < await (continuar[i] == 1); Imprimir(documento)>
+                continuar[i] = 0;
+        }
+
+
+process Coordinador
+                { 
+                for [i = 1 to n]
+                        { 
+                        < await (arribo[i] == 1); >
+                        arribo[i] = 0;
+                }
+                for [i = 1 to n] continuar[i] = 1;
+        }
+        
