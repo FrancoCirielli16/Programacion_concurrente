@@ -1,0 +1,73 @@
+2. Un sistema de control cuenta con 4 procesos que realizan chequeos en forma
+colaborativa. Para ello, reciben el historial de fallos del día anterior (por simplicidad, de
+tamaño N). De cada fallo, se conoce su número de identificación (ID) y su nivel de
+gravedad (0=bajo, 1=intermedio, 2=alto, 3=crítico). Resuelva considerando las siguientes
+situaciones:
+
+
+a) Se debe imprimir en pantalla los ID de todos los errores críticos (no importa el
+orden).
+
+
+indiceAcceso = 0
+ArrayFallos = [N]
+sem mutex = 1
+
+Procces Chequeos[id: 1..4]{
+    P(mutex);
+    while(indiceAcceso < N){
+        int id = ArrayFallos[indiceAcceso].getId();
+        indiceAcceso++;
+        V(mutex)
+        system.out.print(id);
+        P(mutex);
+    }
+    V(mutex);
+}
+
+
+b) Se debe calcular la cantidad de fallos por nivel de gravedad, debiendo quedar los
+resultados en un vector global.
+
+
+int [] cantidadFallos = [4];
+Arrays.fill(cantidadFallos,0);
+sem mutex = 1;
+int indiceAcceso = 0;
+Fallos [] arrayFallos = [N];
+
+Process Chequeos[id:0..3] {
+	P(mutex);
+	while (indiceAcceso < N) {
+		cantidadFallos[arrayFallos[indiceAcceso].getGravedad()]++;
+		indiceAcceso++;
+		V(mutex);
+		P(mutex);
+	}
+	V(mutex);
+}
+
+
+c) Ídem b) pero cada proceso debe ocuparse de contar los fallos de un nivel de
+gravedad determinado
+
+
+
+int [] cantidadFallos = [4];
+Arrays.fill(cantidadFallos,0);
+sem mutex = 1;
+int indiceAcceso = 0;
+Fallos [] arrayFallos = [N];
+
+Process Chequeos[id:0..3] {
+	P(mutex);
+	while (indiceAcceso < N) {
+		if (id == arrayFallos[indiceAcceso].getGravedad()) {
+			cantidadFallos[id]++;
+			indiceAcceso++;	
+		}
+		V(mutex);
+		P(mutex);
+	}
+	V(mutex);
+}
