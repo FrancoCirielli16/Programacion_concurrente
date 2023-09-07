@@ -8,21 +8,18 @@ situaciones:
 a) Se debe imprimir en pantalla los ID de todos los errores críticos (no importa el
 orden).
 
+int N;
+indiceAcceso = 0;
+ArrayFallos = [N];
+sem mutex = 1;
 
-indiceAcceso = 0
-ArrayFallos = [N]
-sem mutex = 1
-
-Procces Chequeos[id: 1..4]{
-    P(mutex);
-    while(indiceAcceso < N){
-        int id = ArrayFallos[indiceAcceso].getId();
-        indiceAcceso++;
-        V(mutex)
-        system.out.print(id);
-        P(mutex);
-    }
-    V(mutex);
+// PRECONDICION: N ES DIVISIBLE POR   4
+Procces Chequeos[id: 0..3]{
+    int division = N / 4;
+    int limiteInferior = division * id;
+    int limiteSuperior = limiteInferior + division - 1;
+    for (int i = limiteInferior; i <= limiteSuperior;i++)
+	System.out.println(arrayFallos[i].getId());
 }
 
 
@@ -37,14 +34,19 @@ int indiceAcceso = 0;
 Fallos [] arrayFallos = [N];
 
 Process Chequeos[id:0..3] {
-	P(mutex);
-	while (indiceAcceso < N) {
-		cantidadFallos[arrayFallos[indiceAcceso].getGravedad()]++;
-		indiceAcceso++;
-		V(mutex);
-		P(mutex);
+	int [] vector = [4];
+	Arrays.fill(vector, 0);
+	int division = N / 4;
+    	int limiteInferior = division * id;
+    	int limiteSuperior = limiteInferior + division - 1;
+	for (int i = limiteInferior; i < limiteSuperior; i++) {
+		vector[arrayFallos[i].getGravedad()]++;	
 	}
+	P(mutex);
+	for (int i =0; i < 4; i++)
+		cantidadFallos[i]+=vector[i];
 	V(mutex);
+	
 }
 
 
@@ -55,19 +57,13 @@ gravedad determinado
 
 int [] cantidadFallos = [4];
 Arrays.fill(cantidadFallos,0);
-sem mutex = 1;
-int indiceAcceso = 0;
 Fallos [] arrayFallos = [N];
 
 Process Chequeos[id:0..3] {
-	P(mutex);
-	while (indiceAcceso < N) {
-		if (id == arrayFallos[indiceAcceso].getGravedad()) {
-			cantidadFallos[id]++;
-			indiceAcceso++;	
-		}
-		V(mutex);
-		P(mutex);
+	int cantidad=0; 
+	for (int i =0;i<N;i++) {
+		if (id == arrayFallos[i].getGravedad())
+			cantidad++;
 	}
-	V(mutex);
+	cantidadFallos[id]=cantidad;
 }
