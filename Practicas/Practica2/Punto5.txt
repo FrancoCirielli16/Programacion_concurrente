@@ -1,0 +1,184 @@
+5.  En  una  empresa  de  logística  de  paquetes  existe  una  sala  de  contenedores  donde  se 
+preparan las entregas. Cada contenedor puede almacenar un paquete y la sala cuenta con 
+capacidad para N contenedores. Resuelva considerando las siguientes situaciones: 
+
+
+a) La empresa cuenta con 2 empleados:  un empleado Preparador que se ocupa de 
+preparar  los  paquetes  y  dejarlos  en  los  contenedores;  un  empelado  Entregador 
+que  se  ocupa  de  tomar  los  paquetes  de  los  contenedores  y  realizar  la  entregas. 
+Tanto el Preparador como el Entregador trabajan de a un paquete por vez. 
+
+
+boolean contenedores[] = deposito[1..N];
+deposito = (false);
+indice = 0
+sem cordinar = 1
+
+Process preparador{
+    while(true){
+        produce paquete
+        P(cordinar)
+        if(indice < N){ 
+            contadores[indice]:=true 
+            indice++
+        }
+        V(cordinar)
+    }
+}
+
+Process entregador{
+    while(true){
+        P(cordinar)
+            if(indice>0){
+                contenedores[indice]=false;
+                indice--
+                //entrega paquete
+            }
+           
+        V(cordinar)
+    }
+}
+
+
+
+
+b) Modifique la solución a) para el caso en que haya P empleados Preparadores. 
+
+
+//opcion que no se si es correcta
+
+boolean contenedores[] = deposito[1..N];
+deposito = (false);
+indice = 1
+sem cordinar = 1
+sem espacio = N
+
+Process Preparador[id 1..P] {
+    while (true) {
+        produce paquete;
+        P(espacio);    // Espera a que haya espacio en los contenedores
+        P(mutex);      
+        contenedores[indice] = true; 
+        indice++;
+        V(mutex);      
+    }
+}
+
+Process Entregador {
+    while (true) {
+        P(mutex);     
+        indice--;
+        contenedores[indice] = false; // Saca el paquete del contenedor
+        // Realiza la entrega del paquete
+        V(espacio);    // Libera espacio en los contenedores
+        V(mutex);      
+    }
+}
+
+//opcion a preguntar 
+
+boolean contenedores[N];
+int indice = 0;
+sem mutex = 1;       
+sem espacio = N;     
+
+Process Preparador[id 1..P] {
+    while (true) {
+        produce paquete;
+        P(espacio);    
+        P(mutex);     
+        contenedores[indice] = true; 
+        indice++;
+        V(mutex);      
+    }
+}
+
+Process Entregador {
+    while (true) {
+        P(mutex);      
+        if (indice > 0) {
+            indice--;
+            contenedores[indice] = false; 
+            // Realiza la entrega del paquete
+            V(espacio);    // Libera espacio en los contenedores
+        }
+        V(mutex);      
+    }
+}
+
+c) Modifique la solución a) para el caso en que haya E empleados Entregadores. 
+
+
+boolean contenedores[N];
+int indice = 0;
+sem mutex = 1;       
+sem espacio = N;     
+
+Process Preparador {
+    while (true) {
+        produce paquete;
+        P(espacio);    
+        P(mutex);
+        if(indice < N){      
+            contenedores[indice] = true; 
+            indice++;
+            V(espacio)
+        }
+        V(mutex);      
+    }
+}
+
+Process Entregador[id 1..E] {
+    while (true) {
+        P(espacio)
+        P(mutex);      
+        indice--;
+        contenedores[indice] = false; 
+        // Realiza la entrega del paquete
+        V(mutex);
+    }
+}
+
+d) Modifique la solución a) para el caso en que haya P empleados Preparadores y E 
+empleadores Entregadores.
+
+
+boolean contenedores[N];
+int indice = 1;
+sem mutex = 1;           
+sem espacio = N;         
+sem paquetesDisponibles = 0; 
+sem preparadoresListos = 0; 
+
+
+
+
+
+Process Preparador[id 1..P] {
+    while (true) {
+        produce paquete;
+        P(espacio);    
+        P(mutex);     
+        contenedores[indice] = true; 
+        indice++;
+        V(mutex);
+        V(paquetesDisponibles);
+        V(preparadoresListos);
+    }
+}
+
+
+
+
+Process Entregador[id 1..E] {
+    while (true) {
+        P(paquetesDisponibles);
+        P(preparadoresListos);
+        P(mutex);      
+        contenedores[indice] = false; 
+        indice--;
+        // Realiza la entrega del paquete
+        V(espacio);
+        V(mutex);
+    }
+}

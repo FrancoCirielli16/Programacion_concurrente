@@ -1,1 +1,61 @@
+Suponga  que  existe  una  BD  que  puede  ser  accedida  por  6  usuarios  como  máximo  al 
+mismo  tiempo.  Además,  los  usuarios  se  clasifican  como  usuarios  de  prioridad  alta  y 
+usuarios de prioridad baja. Por último, la BD tiene la siguiente restricción: 
+• no puede haber más de 4 usuarios con prioridad alta al mismo tiempo usando la BD. 
+• no puede haber más de 5 usuarios con prioridad baja al mismo tiempo usando la BD. 
+Indique si la solución presentada es la más adecuada. Justifique la respuesta.  
 
+
+Var 
+ sem: semaphoro := 6; 
+ alta: semaphoro := 4; 
+ baja: semaphoro := 5; 
+ 
+Process Usuario-Alta [I:1..L]::{    
+    P (sem); 
+    P (alta); 
+        //usa la BD 
+    V(sem); 
+    V(alta); 
+}
+
+
+Process Usuario-Baja [I:1..K]::{    
+    P (sem); 
+    P (baja); 
+    //usa la BD 
+    V(sem); 
+    V(baja); 
+} 
+
+
+//ESTA SOLUCION TIENE EL PROBLEMA DE QUE SI LLEGARAN 6 USUARIOS DE PRIORIDAD ALTA Y SOLO ENTRARIAN 4 USUARIOS,
+Y PODRIAN USAR LA BD. SI AL MISMO TIEMPO LLEGARAN 2 USUARIOS DE PRIORIDAD BAJA, NO PODRIAN UTILIZAR LA BD PORQUE HAY 2 USUARIOS DE PRIORIDAD ALTA QUE ESTAN ESPERANDO A QUE TERMINEN 2 DE LOS CUATRO USUARIOS DE PRIORIDAD ALTA 
+
+
+para solucionar esto habria que rotar los semaphoros para que solo 4 usuarios puedan entrar primero y queden los otros 2 esperando a que se libere espacio
+
+
+Var 
+ sem: semaphoro := 6; 
+ alta: semaphoro := 4; 
+ baja: semaphoro := 5; 
+ 
+Process Usuario-Alta [I:1..L]::{
+    P (alta); // colocando el semaphoro asi solo van a poder entrar 4 y los 2 quedarian esperando entonces sem quedaria con 2 espacios todavia libre entonces si pueden entrar 2 de prioridad baja
+    P (sem); 
+        //usa la BD 
+    V(alta); 
+    V(sem); 
+    
+}
+
+
+Process Usuario-Baja [I:1..K]::{    
+    P (baja); 
+    P (sem); 
+    //usa la BD 
+    V(baja); 
+    V(sem); 
+    
+} 
