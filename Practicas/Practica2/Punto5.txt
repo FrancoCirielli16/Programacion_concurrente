@@ -11,17 +11,16 @@ Tanto el Preparador como el Entregador trabajan de a un paquete por vez.
 
 boolean contenedores[] = deposito[1..N];
 deposito = (false);
-indice = 0
+indice = 1
 sem cordinar = 1
-
+sem espacio = N
 Process preparador{
     while(true){
         produce paquete
+        P(espacio)
         P(cordinar)
-        if(indice < N){ 
             contadores[indice]:=true 
             indice++
-        }
         V(cordinar)
     }
 }
@@ -29,12 +28,10 @@ Process preparador{
 Process entregador{
     while(true){
         P(cordinar)
-            if(indice>0){
-                contenedores[indice]=false;
-                indice--
-                //entrega paquete
-            }
-           
+            contenedores[indice]=false;
+            indice--
+            //entrega paquete
+            V(espacio)
         V(cordinar)
     }
 }
@@ -52,6 +49,7 @@ deposito = (false);
 indice = 1
 sem cordinar = 1
 sem espacio = N
+
 
 Process Preparador[id 1..P] {
     while (true) {
@@ -80,7 +78,8 @@ Process Entregador {
 boolean contenedores[N];
 int indice = 0;
 sem mutex = 1;       
-sem espacio = N;     
+sem espacio = N;
+sem paquetesDisponibles = 0;     
 
 Process Preparador[id 1..P] {
     while (true) {
@@ -89,12 +88,14 @@ Process Preparador[id 1..P] {
         P(mutex);     
         contenedores[indice] = true; 
         indice++;
-        V(mutex);      
+        V(mutex);
+        V(paquetesDisponibles);  
     }
 }
 
 Process Entregador {
     while (true) {
+        P(paquetesDisponibles);
         P(mutex);      
         if (indice > 0) {
             indice--;
