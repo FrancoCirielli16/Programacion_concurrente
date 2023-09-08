@@ -27,8 +27,8 @@ Process preparador{
 
 Process entregador{
     while(true){
-        P(cordinar)
         V(espacio)
+        P(cordinar)
             contenedores[indice]=false;
             indice--
             //entrega paquete
