@@ -28,10 +28,11 @@ Process preparador{
 Process entregador{
     while(true){
         P(cordinar)
+        V(espacio)
             contenedores[indice]=false;
             indice--
             //entrega paquete
-            V(espacio)
+            
         V(cordinar)
     }
 }
