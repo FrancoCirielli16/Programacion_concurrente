@@ -8,23 +8,126 @@ el orden. Existe una función Imprimir(documento) llamada por la persona que sim
 uso de la impresora. Sólo se deben usar los procesos que representan a las Personas. 
 
 
+Sem mutex = 1;
+
+Process Persona[id:1..N]{
+  While(true){
+      P(mutex)
+      Imprimir(documento)
+      V(mutex)
+  }
+}
 
 
 b) Modifique la solución de (a) para el caso en que se deba respetar el orden de llegada. 
 
+Sem mutex = 1
+cola llegada
+libre = true
+sem espera[N] = ([N] 0);
 
+Process Persona[id:1..N]{
+  while(true){
+      P(mutex)
+      if(libre){libre = false V(mutex);}
+      else
+          {cola.push(id); V(mutex) P(espera[id])}
+      Imprimir(Documento)
+      P(mutex);
+      if(empty(llegada)){libre = true}
+      else {aux = cola.pop() V(espera[aux])}
+      V(mutex);
+  }
+
+}
 
 
 c) Modifique  la  solución  de  (a)  para  el  caso  en  que  se  deba  respetar  estrictamente  el 
 orden dado por el identificador del proceso (la persona X no puede usar la impresora 
 hasta que no haya terminado de usarla la persona X-1). 
 
+sem espera[1..N] = ([N] 0);
+espera[1] = 1
+
+Process Persona[id:1..N]{
+  while(true){
+      P(espera[id])
+      Imprimir(Documento)
+      V(espera[id+1])
+  }
+
+}
 
 
 d) Modifique la solución de (b) para el caso en que además hay un proceso Coordinador 
 que le indica a cada persona que es su turno de usar la impresora. 
 
 
+cola;
+sem mutex = 1
+sem termine = 0
+sem lugar = 0
+sem espera[N] = ([N] 0);
+
+Process Coordinador
+{
+	while (true) {
+    P(lugar);
+		P(mutex)
+		siguiente = cola.pop();
+		V(mutex)
+    V(espera[siguiente])
+    P(termine)
+	}
+}
+
+Process Personas[id:1..N]
+{
+    P(mutex);
+    V(lugar);
+		  cola.push(id)
+    V(mutex);
+		P(espera[id])
+		Imprimir(documento);
+    V(termine)
+}
+
 
 e) Modificar la solución (d) para el caso en que sean 5 impresoras. El coordinador le 
 indica a la persona cuando puede usar una impresora, y cual debe usar.  
+
+cola;
+sem mutex = 1
+sem termine = 5
+sem lugar = 0
+sem impresora[5] = ([5 0);
+sem espera[N] = ([N] 0);
+imp = 1
+Process Coordinador
+{
+  impresorasOcu[5] = ([N] false)
+	while (true) {
+    P(lugar);
+		P(mutex)
+		siguiente = cola.pop();  
+    for i=0; i<5; i++ {
+        if(v[i]){imp = i}
+    }
+		V(mutex)
+   
+    V(espera[siguiente])
+    P(termine)
+	}
+}
+
+Process Personas[id:1..N]
+{
+    P(mutex);
+    V(lugar);
+		  cola.push(id)
+    V(mutex);
+		P(espera[id])
+    V(impresora[imp])
+		Imprimir(documento);
+    V(termine)
+}
