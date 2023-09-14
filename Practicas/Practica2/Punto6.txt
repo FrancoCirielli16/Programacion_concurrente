@@ -98,25 +98,30 @@ indica a la persona cuando puede usar una impresora, y cual debe usar.
 
 cola;
 sem mutex = 1
-sem termine = 5
 sem lugar = 0
-sem impresora[5] = ([5 0);
+sem impresoras = 5
 sem espera[N] = ([N] 0);
-imp = 1
+int turnodeimp[N]
+impresorasOcu[5] = ([N] true)
+sem mutexvectorimpresoras = 1
 Process Coordinador
 {
-  impresorasOcu[5] = ([N] false)
-	while (true) {
-    P(lugar);
-		P(mutex)
-		siguiente = cola.pop();  
-    for i=0; i<5; i++ {
-        if(v[i]){imp = i}
-    }
-		V(mutex)
-   
-    V(espera[siguiente])
-    P(termine)
+  imp = 0
+  
+  while (true) {
+    	P(lugar);
+	P(mutex)	
+	siguiente = cola.pop();  
+	V(mutex)
+	P(impresora)
+	P(mutexvectorimpresoras)
+    	for i=0; i<5; i++ {
+        	if(not impresorasOcu[i]){imp = i}
+    	}
+	impresrasOcu[imp] = false
+	V(mutexvectorimpresoras)
+	turnodeimp[siguiente]=imp
+    	V(espera[siguiente])
 	}
 }
 
@@ -124,10 +129,12 @@ Process Personas[id:1..N]
 {
     P(mutex);
     V(lugar);
-		  cola.push(id)
+    cola.push(id)
     V(mutex);
-		P(espera[id])
-    V(impresora[imp])
-		Imprimir(documento);
-    V(termine)
+    P(espera[id])
+    Imprimir(documento,turnodeimp[id]);	
+    P(mutexvectorimpresoras)
+    impresoraOcu[turnodeimp[id]] = true
+    V(mutexvectorimpresoras)
+    V(impresora)
 }
