@@ -1,0 +1,31 @@
+10.
+A una cerealera van T camiones a descargarse trigo y M camiones a descargar maíz.
+
+Sólo hay lugar para que 7 camiones a la vez descarguen, pero no pueden ser más de 5 del mismo
+tipo de cereal. 
+
+Nota: no usar un proceso extra que actué como coordinador, resolverlo
+entre los camiones.
+
+Var 
+sem: camiones := 7; 
+sem trigo := 5; 
+sem maiz := 5; 
+ 
+Process Trigo [id:1..T]{
+    P (trigo); 
+    P (camiones); 
+    //descarga
+    V(trigo); 
+    V(camiones); 
+    
+}
+
+Process Maiz [id:1..M]{    
+    P (maiz); 
+    P (camiones); 
+    //descarga 
+    V(maiz); 
+    V(camiones); 
+    
+} 

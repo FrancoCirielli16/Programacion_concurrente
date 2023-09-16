@@ -1,0 +1,70 @@
+9. Resolver el funcionamiento en una fábrica de ventanas con 7 empleados (4 carpinteros, 1
+vidriero y 2 armadores) que trabajan de la siguiente manera:
+
+
+• Los carpinteros continuamente hacen marcos (cada marco es armando por un único
+carpintero) y los deja en un depósito con capacidad de almacenar 30 marcos.
+
+• El vidriero continuamente hace vidrios y los deja en otro depósito con capacidad para
+50 vidrios.
+
+• Los armadores continuamente toman un marco y un vidrio (en ese orden) de los
+depósitos correspondientes y arman la ventana (cada ventana es armada por un único
+armador).
+
+sem depósito_marcos = 30;
+sem depósito_vidrio = 50;
+sem mutexCarp = 1;
+sem hayMarcos = 0;
+sem hayVidrio = 0;
+sem mutexArm = 1;
+marcos[30];
+vidrios[50];
+
+
+Process carpintero[id:1..4]{
+    libreM = 0
+    while(true){
+        marco = hacerMarco()
+        P(depósito_marcos);
+        P(mutexCarp);
+        marcos[libreM] = marco;
+        libreM = (libreM +1) mod 30;
+        V(mutexCarp);
+        V(hayMarcos)
+    }
+}
+
+
+Process vidriero{
+    libreV = 0
+    while(true){
+        vidrio = hacerVidrio()
+        P(depósito_vidrio);
+        vidrios[libreV] = vidrio;
+        libreV = (libreV +1) mod 50;
+        V(hayVidrio)
+    }
+}
+
+
+
+Process armadores[id:1..2]{
+    libreM = 0
+    libreV = 0
+    while(true){
+        P(hayMarcos)
+        P(mutexArm)
+        m = marcos[libreM];
+        libreM = (libreM + 1) mod 30;
+        V(mutexArm)
+        V(depósito_marcos)
+        P(hacerVidrio)
+        P(mutexArm)
+        v = vidrios[libreV]
+        libreV = (libreV + 1) mod 50;
+        V(mutexArm)
+        V(depósito_vidrio)
+        //arma ventana
+    }
+}

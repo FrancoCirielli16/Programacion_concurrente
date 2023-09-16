@@ -1,0 +1,71 @@
+11.
+
+En un vacunatorio hay un empleado de salud para vacunar a 50 personas. 
+El empleado de salud atiende a las personas de acuerdo con el orden de llegada y de a 5 personas a la
+vez. 
+
+Es decir, que cuando está libre debe esperar a que haya al menos 5 personas 
+esperando, luego vacuna a las 5 primeras personas, y al terminar las deja ir para esperar
+por otras 5. Cuando ha atendido a las 50 personas el empleado de salud se retira. 
+
+Nota: todos los procesos deben terminar su ejecución; asegurarse de no realizar Busy Waiting;
+suponga que el empleado tienen una función VacunarPersona() que simula que el empleado
+está vacunando a UNA persona. 
+
+
+
+sem personas_esperando = 5;
+
+cola llegada;
+
+
+llegada = 0;
+
+
+
+Process empleado{
+    while(atendidos<=50){
+        P(personas_esperando)
+        llegada++
+        cola.push()
+        if(llegada == 5){
+            for(i=0; i<5 i++){
+                persona = cola.pop()
+                VacunarPersona(persona)
+                V(personas_esperando)
+            }
+            atendidos:=atendidos-5
+        }
+    }
+}
+
+
+
+
+sem personas_esperando = 5;
+cola personas
+
+
+
+Process empleado{
+    llegada = 0;
+    atendidos = 50;  
+    while(atendidos>=0){
+        llegada++;
+        personas.push(p)
+        P(personas_esperando)
+        for(i=0; i<5 i++){
+            persona = personas.pop()
+            VacunarPersona(persona)
+            atendidos--;
+        }
+    
+        for (int i = 0; i < 5; i++) {
+            V(personas_esperando);
+        }
+        
+    }
+}
+
+
+

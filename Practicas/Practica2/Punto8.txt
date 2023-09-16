@@ -1,0 +1,59 @@
+8.
+
+Una fábrica de piezas metálicas debe producir T piezas por día. Para eso, cuenta con E
+empleados que se ocupan de producir las piezas de a una por vez (se asume T>E).
+
+La fábrica empieza a producir una vez que todos los empleados llegaron. Mientras haya
+piezas por fabricar, los empleados tomarán una y la realizarán.
+
+Cada empleado puede tardar distinto tiempo en fabricar una pieza. Al finalizar el día, se le da un premio al
+empleado que más piezas fabricó.
+
+
+
+sem mutex = 1
+sem comenzar[N] = ([N] 0)
+sem piezas_producidas[N] = ([N] 0)
+sem terminar = 0
+pieza = 0
+empleados = 0
+idMax;
+
+Process empleados[id:1..N]{
+    P(mutex)
+    empelados++;
+    if(empelados == N){
+        for(i=0; i<N; i++){
+            V(comenzar[i])
+        }
+    }
+    V(mutex)
+
+    P(comenzar[id])
+    cant_piezas = -1
+    while(pieza<N){
+        p = producir();
+        
+        piezas_producidas[id]++;
+        P(mutex)
+        piezas++;
+        if(piezas == T){
+            for(i=0; i<N; i++){
+                if(cant_piezas<piezas_producidas[i]){
+                    cant_piezas = piezas_producidas[i];
+                    idMax = i
+                }
+            }
+            for(i=0; i<N; i++){
+                V(terminar)
+            }
+        }
+        V(mutex)
+    }
+    P(terminar)
+    if(id == idMax){
+        recibirPremio()
+    }   
+}
+
+

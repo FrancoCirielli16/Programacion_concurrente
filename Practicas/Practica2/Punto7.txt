@@ -1,11 +1,76 @@
 
 7. Suponga que se tiene un curso con 50 alumnos. Cada alumno debe realizar una tarea y
-existen 10 enunciados posibles. Una vez que todos los alumnos eligieron su tarea,
-comienzan a realizarla. Cada vez que un alumno termina su tarea, le avisa al profesor y se
+existen 10 enunciados posibles. 
+
+Una vez que todos los alumnos eligieron su tarea, comienzan a realizarla. 
+
+Cada vez que un alumno termina su tarea, le avisa al profesor y se 
 queda esperando el puntaje del grupo, el cual está dado por todos aquellos que comparten
-el mismo enunciado. Cuando un grupo terminó, el profesor les otorga un puntaje que
+el mismo enunciado. 
+
+Cuando un grupo terminó, el profesor les otorga un puntaje que
 representa el orden en que se terminó esa tarea de las 10 posibles.
 
 Nota: Para elegir la tarea suponga que existe una función elegir que le asigna una tarea a
 un alumno (esta función asignará 10 tareas diferentes entre 50 alumnos, es decir, que 5
 alumnos tendrán la tarea 1, otros 5 la tarea 2 y así sucesivamente para las 10 tareas).
+
+
+sem todos = 0;
+sem mutex = 1;
+sem elegir = 1;
+sem comenzar[1..50] = ([50],0);
+sem completa = 0;
+
+
+Cola c;
+t_entregadas = 0
+tareas[10]
+
+
+Process Alumnos[id:1..50]{
+    Tarea = elegir()
+    P(elegir)
+    t_entregadas++;
+    if(t_entregadas == 50){
+        V(todos);
+    }
+    V(elegir);
+
+    P(comenzar[id])
+    //realiza tarea
+    P(mutexCola)
+    c.push(Tarea)
+    V(mutexCola)
+    V(completa)
+
+    P(puntaje[Tarea])
+    verTarea(tarea[Tarea])
+}
+
+
+sem entregas[10] = ([10],0);
+
+Process Profesora{
+    Orden = 10
+    P(todos)
+
+    for(int i = 0; i<50; i++){
+        V(comenzar[i])
+    }
+
+    for(int i=0; i<50; i++){
+        P(completa);
+        P(mutexCola);
+        grupo = c.pop();
+        V(mutexCola);
+        entregas[grupo]++
+        if(entregas[grupo] == 5){
+            tareas[i] = Orden;
+            Orden--;
+            for(int i = 0; i < 5; i ++){
+                V(puntaje[grupo]);
+            }
+        }
+    }
+}
