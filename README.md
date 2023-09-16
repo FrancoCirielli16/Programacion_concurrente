@@ -5,3 +5,4 @@
 </div>
 
 - [Practica 1](Practicas/Practica1)
+- [Practica 1](Practicas/Practica2)
