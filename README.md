@@ -37,8 +37,8 @@ de desarrollo, aplicaciones.
 
 <h2>Cuestionarios</h2>
 
-- [Clase 1 - Concurrencia](Cuestionarios/preguntas-clases-1y2/)
-- [Clase 2 - Acciones Atómicas y Sincronización](Cuestionarios/preguntas-clases-3y4/)
+- [Clases Teóricas 1 y 2 ](Cuestionarios/preguntas-clases-1y2/)
+- [Clases Teóricas 3 y 4 ](Cuestionarios/preguntas-clases-3y4/)
 
 
 <h2>Practicas</h2>
