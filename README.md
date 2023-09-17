@@ -35,6 +35,12 @@ de desarrollo, aplicaciones.
 - [Clase 4 - Semáforos](Teorias/Clase-4---Programacin-Concurrente---2023--Clase.pdf/)
 - [Clase 5 - Monitores](Teorias/Clase-5---Programacin-Concurrente---2023--Clase.pdf/)
 
+<h2>Cuestionarios</h2>
+
+- [Clase 1 - Concurrencia](Cuestionarios/preguntas-clases-1y2/)
+- [Clase 2 - Acciones Atómicas y Sincronización](Cuestionarios/preguntas-clases-3y4/)
+
+
 <h2>Practicas</h2>
 
 - [Variables Compartidas](Practicas/Practica1)
