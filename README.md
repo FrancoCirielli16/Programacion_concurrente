@@ -26,11 +26,11 @@ de desarrollo, aplicaciones.
 
 <h2>Teorias</h2>
 
-- [Clase 1 -](Teorias/Clase-1---Programacin-Concurrente---2023--Clase.pdf/)
-- [Clase 2](Teorias/Clase-2---Programacin-Concurrente---2023--Clase.pdf/)
-- [Clase 3](Teorias/Clase-3---Programacin-Concurrente---2023--Clase.pdf/)
-- [Clase 4](Teorias/Clase-4---Programacin-Concurrente---2023--Clase.pdf/)
-- [Clase 5](Teorias/Clase-5---Programacin-Concurrente---2023--Clase.pdf/)
+- [Clase 1 - Concurrencia](Teorias/Clase-1---Programacin-Concurrente---2023--Clase.pdf/)
+- [Clase 2 - Acciones Atómicas y Sincronización](Teorias/Clase-2---Programacin-Concurrente---2023--Clase.pdf/)
+- [Clase 3 - Sincronización por Variables Compartidas](Teorias/Clase-3---Programacin-Concurrente---2023--Clase.pdf/)
+- [Clase 4 - Semáforos](Teorias/Clase-4---Programacin-Concurrente---2023--Clase.pdf/)
+- [Clase 5 - Monitores](Teorias/Clase-5---Programacin-Concurrente---2023--Clase.pdf/)
 
 <h2>Practicas</h2>
 
