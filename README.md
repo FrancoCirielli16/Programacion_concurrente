@@ -39,7 +39,7 @@ de desarrollo, aplicaciones.
 
 - [Clases Teóricas 1 y 2 ](Cuestionarios/preguntas-clases-1y2.pdf/)
 - [Clases Teóricas 3 y 4 ](Cuestionarios/preguntas-clases-3y4.pdf/)
-- [Clases Teóricas 5 ](Cuestionarios/preguntas-clases-5/)
+- [Clases Teóricas 5 ](Cuestionarios/preguntas-clases-5.pdf/)
 
 
 <h2>Practicas</h2>
