@@ -1,0 +1,45 @@
+2.Existen N procesos que deben leer información de una base de datos, la cual es administrada 
+por un motor que admite una cantidad limitada de consultas simultáneas.
+
+a) Analice el problema y defina qué procesos, recursos y monitores serán 
+necesarios/convenientes,  además  de  las  posibles  sincronizaciones  requeridas  para 
+resolver el problema. 
+
+monitores: Dase de datos
+
+Procesos: Tenemos N procesos que desean acceder a la base de datos para leer información.
+
+Recursos:
+
+La base de datos en sí misma, que debe ser accedida de manera controlada para evitar exceder el límite de consultas simultáneas del motor de la base de datos.
+Un monitor para controlar el acceso a la base de datos y garantizar que no se exceda el límite de consultas simultáneas.
+Sincronizaciones requeridas:
+
+Un mecanismo para que los procesos soliciten acceso a la base de datos de manera ordenada y justa.
+Un mecanismo para que los procesos esperen si el límite de consultas simultáneas se ha alcanzado.
+
+
+
+b) Implemente el acceso a la base por parte de los procesos, sabiendo que el motor de 
+base de datos puede atender a lo sumo 5 consultas de lectura simultáneas.
+
+Monitor MonitorBaseDeDatos
+    cond cola; 
+    int consultas_simultaneas = 0;
+
+    Procedure EntrarBaseDeDatos()
+        // Verificar si se excede el límite de consultas simultáneas
+        while (consultas_simultaneas >= 5) {
+            wait(cola);
+        }
+        consultas_simultaneas++;
+        // Realizar la lectura de datos
+    End Procedure
+
+    Procedure SalirBaseDeDatos()
+        consultas_simultaneas--;
+        // Liberar recursos de la base de datos
+        signal(cola); 
+    End Procedure
+
+End Monitor
