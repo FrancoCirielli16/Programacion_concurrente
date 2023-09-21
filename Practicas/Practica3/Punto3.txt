@@ -1,0 +1,153 @@
+3.  Existen N personas que deben fotocopiar un documento. La fotocopiadora sólo puede ser 
+usada  por  una  persona  a  la  vez.  Analice  el  problema  y  defina  qué  procesos,  recursos  y 
+monitores serán necesarios/convenientes, además de las posibles sincronizaciones requeridas 
+para resolver el problema. Luego, resuelva considerando las siguientes situaciones:
+
+
+a) Implemente  una  solución  suponiendo  no  importa el  orden  de  uso.  Existe  una  función 
+Fotocopiar() que simula el uso de la fotocopiadora. 
+
+
+//sin monitor
+semáforo fotocopiadora = 1; // Inicializado en 1, indicando que la fotocopiadora está libre
+
+Procedure Fotocopiar(persona):
+    P(fotocopiadora); // Intenta adquirir la fotocopiadora
+    // Realizar la tarea de fotocopiar
+    Fotocopiar();
+    V(fotocopiadora); // Liberar la fotocopiadora cuando haya terminado
+
+
+//Con monitores
+
+Monitor Fotocopiadora
+    bool libre = true;
+    cond cola;
+    
+
+    Procedure Pasar (){ 
+        if (not libre) → wait (cola);
+        libre = false;
+    }
+
+    Procedure Salir (){ 
+        libre = true;
+        signal (cola);
+    }
+
+End Monitor
+
+Process Persona [id:1..M]
+    Fotocopiadora.Pasar();
+    //fotocopia las cosas
+    Fotocopiadora.Salir();
+End Process;
+
+
+b) Modifique la solución de (a) para el caso en que se deba respetar el orden de llegada. 
+
+
+Monitor Fotocopiadora
+    bool libre = true;
+    cond cola;
+    int esperando = 0;
+
+    Procedure Pasar(){ 
+        if (not libre) { esperando ++; wait (cola);}
+        else libre = false;
+        Fotocopiar()
+    }
+    
+    Procedure Salir(){ 
+        if (esperando > 0 ) { esperando--; signal (cola);}
+        else libre = true;
+    } 
+    
+End Monitor
+
+Process Persona [id:1..M]
+    Fotocopiadora.Pasar();
+    //fotocopia las cosas
+    Fotocopiadora.Salir();
+End Process;
+
+c) Modifique la solución de (b) para el caso en que se deba dar prioridad de acuerdo con la 
+edad de cada persona (cuando la fotocopiadora está libre la debe usar la persona de mayor 
+edad entre las que estén esperando para usarla). 
+
+
+Monitor FotocopiadoraConPrioridad
+    cond cola_espera;
+
+    Procedure Fotocopiar(persona)
+        wait(cola_espera); // Espera su turno en la cola
+        // Realizar la tarea de fotocopiar
+        Fotocopiar();
+        signal(cola_espera); // Liberar la fotocopiadora para la siguiente persona
+    End Procedure
+End Monitor
+
+d) Modifique la solución de (a) para el caso en que se deba respetar estrictamente el orden 
+dado por el identificador del proceso (la persona X no puede usar la fotocopiadora hasta 
+que no haya terminado de usarla la persona X-1). 
+
+
+Monitor FotocopiadoraConOrdenEstricto
+    int persona_actual = 0;
+    cond cola_espera;
+
+    Procedure Fotocopiar(persona)
+        if (persona != persona_actual)
+            wait(cola_espera); // Espera su turno en la cola
+        // Realizar la tarea de fotocopiar
+        Fotocopiar();
+        persona_actual++;
+        signal(cola_espera); // Liberar la fotocopiadora para la siguiente persona
+    End Procedure
+End Monitor
+
+
+e) Modifique la solución de (b) para el caso en que además haya un Empleado que le indica 
+a cada persona cuando debe usar la fotocopiadora. 
+
+
+Monitor FotocopiadoraConEmpleado
+    cond cola_espera;
+    bool empleado_indicando = false;
+
+    Procedure EmpleadoIndica()
+        empleado_indicando = true;
+        signal(cola_espera); // Despierta a la persona para usar la fotocopiadora
+    End Procedure
+
+    Procedure Fotocopiar(persona)
+        if (!empleado_indicando)
+            wait(cola_espera); // Espera a que el Empleado indique
+        // Realizar la tarea de fotocopiar
+        Fotocopiar();
+        signal(cola_espera); // Liberar la fotocopiadora
+    End Procedure
+End Monitor
+
+f) Modificar la solución (e) para el caso en que sean 10 fotocopiadoras. El empleado le indica 
+a la persona cuál fotocopiadora usar y cuándo hacerlo.
+
+
+
+Monitor FotocopiadorasConEmpleado
+    cond[10] colas_espera;
+    bool empleado_indicando = false;
+
+    Procedure EmpleadoIndica(fotocopiadora)
+        empleado_indicando = true;
+        signal(colas_espera[fotocopiadora]); // Despierta a la persona para usar la fotocopiadora específica
+    End Procedure
+
+    Procedure Fotocopiar(persona, fotocopiadora)
+        if (!empleado_indicando)
+            wait(colas_espera[fotocopiadora]); // Espera a que el Empleado indique la fotocopiadora
+        // Realizar la tarea de fotocopiar
+        Fotocopiar();
+        signal(colas_espera[fotocopiadora]); // Liberar la fotocopiadora específica
+    End Procedure
+End Monitor

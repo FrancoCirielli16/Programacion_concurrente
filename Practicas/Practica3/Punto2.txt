@@ -43,3 +43,10 @@ Monitor MonitorBaseDeDatos
     End Procedure
 
 End Monitor
+
+
+Process user [id:1..M]
+    MonitorBaseDeDatos.EntrarBaseDeDatos();
+    "Se utilizo la DB"
+    MonitorBaseDeDatos.SalirBaseDeDatos();
+End Process;
