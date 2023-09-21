@@ -1,24 +1,9 @@
 1.  Se dispone de un puente por el cual puede pasar un solo auto a la vez. Un auto pide permiso 
 para pasar por el puente, cruza por el mismo y luego sigue su camino. 
- 
 
- 
-a. ¿El código funciona correctamente? 
-Justifique su respuesta. 
-b. ¿Se  podría  simplificar  el  programa?  ¿Sin 
-monitor? ¿Menos procedimientos? ¿Sin 
-variable condition? En caso afirmativo, 
-rescriba el código. 
-c. ¿La  solución  original  respeta  el  orden  de 
-llegada de los vehículos? Si rescribió el código 
-en el punto b), ¿esa solución respeta el orden 
-de llegada?  
- 
- 
 
- 
- 
 Monitor  Puente 
+
     cond cola;  
     int cant= 0; 
  
@@ -30,11 +15,75 @@ Monitor  Puente
     Procedure salirPuente () 
         cant = cant – 1; 
         signal(cola); 
-    end; 
+    end;
+
 End Monitor;  
- 
+
+
 Process Auto [a:1..M] 
    Puente. entrarPuente (a); 
    “el auto cruza el puente” 
    Puente. salirPuente(a); 
 End Process; 
+
+
+ 
+a. ¿El código funciona correctamente? 
+Justifique su respuesta. 
+
+
+
+
+b. ¿Se  podría  simplificar  el  programa?  ¿Sin 
+monitor? ¿Menos procedimientos? ¿Sin variable condition? En caso afirmativo, 
+rescriba el código. 
+
+En cuanto a la simplificación del programa, es importante notar que el código proporcionado implementa un mecanismo de control de acceso al puente utilizando un monitor. 
+Los procedimientos entrarPuente y salirPuente controlan el acceso al puente asegurándose de que solo un vehículo cruce a la vez.
+
+La implementación es relativamente simple y efectiva para garantizar el acceso exclusivo al puente.
+ Simplificar aún más el código podría comprometer la integridad del control de acceso.
+  Por lo tanto, es importante mantener la estructura actual del monitor y las funciones entrarPuente y salirPuente.
+
+
+c. ¿La  solución  original  respeta  el  orden  de llegada de los vehículos? 
+Si rescribió el código en el punto b), 
+¿esa solución respeta el orden de llegada?  
+ 
+La solución original no garantiza que se respete el orden de llegada de los vehículos. 
+El código actual permite que cualquier vehículo que solicite acceso al puente (llame a entrarPuente) lo haga, sin importar el orden de llegada. 
+Esto significa que un vehículo que llegó posteriormente podría cruzar el puente antes que otro que llegó antes.
+
+Para garantizar el orden de llegada, se podría modificar el código de la siguiente manera:
+
+
+Monitor Puente
+    cond cola;
+    int cant = 0;
+    int turno = 1;  // Agregar una variable para llevar un registro del turno
+
+    Procedure entrarPuente(a)
+        while (cant > 0 && turno != a) wait(cola);
+        cant = cant + 1;
+        turno = turno + 1;
+    end;
+
+    Procedure salirPuente()
+        cant = cant - 1;
+        signal(cola);
+    end;
+
+End Monitor;
+
+Process Auto [a:1..M]
+    Puente.entrarPuente(a);
+    "el auto cruza el puente"
+    Puente.salirPuente();
+End Process;
+
+
+En esta versión modificada, se agrega una variable turno que se actualiza cada vez que un vehículo solicita acceso. 
+Esto asegura que los vehículos crucen el puente en el orden en que llegaron, respetando así el orden de llegada.
+
+ 
+ 
