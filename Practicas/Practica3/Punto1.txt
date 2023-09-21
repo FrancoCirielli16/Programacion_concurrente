@@ -38,39 +38,45 @@ b. ¿Se  podría  simplificar  el  programa?  ¿Sin
 monitor? ¿Menos procedimientos? ¿Sin variable condition? En caso afirmativo, 
 rescriba el código. 
 
-En cuanto a la simplificación del programa, es importante notar que el código proporcionado implementa un mecanismo de control de acceso al puente utilizando un monitor. 
-Los procedimientos entrarPuente y salirPuente controlan el acceso al puente asegurándose de que solo un vehículo cruce a la vez.
+¿Se  podría  simplificar  el  programa? Si
+¿Sin monitor? Si
+¿Sin variable condition? Si
 
-La implementación es relativamente simple y efectiva para garantizar el acceso exclusivo al puente.
- Simplificar aún más el código podría comprometer la integridad del control de acceso.
-  Por lo tanto, es importante mantener la estructura actual del monitor y las funciones entrarPuente y salirPuente.
+sem puente = 1;  
+
+Process Auto [id:1..M]
+    P(puente);  // Bloquear el acceso al puente si no está libre
+
+    "el auto cruza el puente"
+
+    V(puente);  // Liberar el puente
+End Process;
 
 
 c. ¿La  solución  original  respeta  el  orden  de llegada de los vehículos? 
 Si rescribió el código en el punto b), 
 ¿esa solución respeta el orden de llegada?  
  
-La solución original no garantiza que se respete el orden de llegada de los vehículos. 
-El código actual permite que cualquier vehículo que solicite acceso al puente (llame a entrarPuente) lo haga, sin importar el orden de llegada. 
-Esto significa que un vehículo que llegó posteriormente podría cruzar el puente antes que otro que llegó antes.
-
+no garantiza que se respete el orden de llegada de los vehículos. 
 Para garantizar el orden de llegada, se podría modificar el código de la siguiente manera:
 
 
 Monitor Puente
     cond cola;
-    int cant = 0;
-    int turno = 1;  // Agregar una variable para llevar un registro del turno
+    bool libre = true;
+    int esperando = 0;  
 
     Procedure entrarPuente(a)
-        while (cant > 0 && turno != a) wait(cola);
-        cant = cant + 1;
-        turno = turno + 1;
+        while (not libre) esperando++ wait(cola);
+        libre = false;
     end;
 
     Procedure salirPuente()
-        cant = cant - 1;
-        signal(cola);
+        if (esperando > 0 ) { 
+            esperando --;
+            signal (cola);
+        }
+        else libre = true;
     end;
 
 End Monitor;
@@ -82,8 +88,6 @@ Process Auto [a:1..M]
 End Process;
 
 
-En esta versión modificada, se agrega una variable turno que se actualiza cada vez que un vehículo solicita acceso. 
-Esto asegura que los vehículos crucen el puente en el orden en que llegaron, respetando así el orden de llegada.
 
  
  
