@@ -1,0 +1,74 @@
+6. Existe una comisión de 50 alumnos que deben realizar tareas de a pares, las cuales son
+corregidas por un JTP. Cuando los alumnos llegan, forman una fila. Una vez que están todos
+en fila, el JTP les asigna un número de grupo a cada uno. Para ello, suponga que existe una
+función AsignarNroGrupo() que retorna un número “aleatorio” del 1 al 25. Cuando un alumno 
+ha recibido su número de grupo, comienza a realizar su tarea. Al terminarla, el alumno le avisa
+al JTP y espera por su nota. Cuando los dos alumnos del grupo completaron la tarea, el JTP
+les asigna un puntaje (el primer grupo en terminar tendrá como nota 25, el segundo 24, y así
+sucesivamente hasta el último que tendrá nota 1). Nota: el JTP no guarda el número de grupo
+que le asigna a cada alumno.
+
+
+Monitor Comision { 
+
+  int cant = 0;
+  cond filaEspera, inicio, notasEntregadas[25];
+  Array Grupo[50], Notas[25]
+  Cola filaAlumnos,Entregados;
+
+  Procedure llegada (id,var migrupo){ 
+    cant ++;
+    filaAlumnos.push(id)
+    if (cant == 50) 
+        signal (inicio);
+    wait (filaEspera);
+    miGrupo = Grupo[id]
+}
+  
+  Procedure Iniciar (){ 
+      if (cant < 50) 
+          wait (inicio);
+      for (int i=0; i<50; i++){
+            id = filaAlumnos.pop();
+            Grupo[id] = AsignasGrupo();
+            signal(espera);
+      }
+  }  
+
+  Procedure Terminar(var Nota), miGrupo{ 
+      Entregados.push(miGrupo);
+      signal(inicio);
+      wait(notasEntregados[miGrupo);
+      Nota = Notas[miGrupo]
+  }  
+
+  Procedure EntregarNota(var Array NotasEntregadasJTP, nota){
+      if(empty(Entegados){
+          wait(inicio);
+      }
+      grupo = Entregados.pop();
+      NotasEntregadasJTP[grupo]++;
+      if(NotasEntregadasJTP[grupo] == 2){
+          Notas[grupo] = nota;
+          nota--
+          signal.all(notasEntregadas[grupo])
+      }
+  }
+  
+}
+
+Process Alumnos[id: 0..50-1]{ 
+    Comision.llegada(id,migrupo);
+    HaerExamen();
+    Comision.Terminar(Nota,migrupo);
+    
+}
+
+Process JTP{ 
+  nota = 25
+  NotasEntregadas[25]
+  Comision.Iniciar();
+  for (int i=0; i<50; i++){
+          Comision.EntregarNota(NotasEntregadas,nota);
+      }
+}
