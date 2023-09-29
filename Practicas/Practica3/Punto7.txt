@@ -28,9 +28,8 @@ Monitor Canchas[id:1..2]{
       Procedure Juego(){
           cant++
           if(cant == 10){
-              Delay(50)
+              Delay(50);
               signal.all(Espera)
-              
           }
         wait(Espera)
       }
