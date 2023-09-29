@@ -1,0 +1,36 @@
+
+Monitor Puente{
+    bool libre = true;
+    int esperando = 0;
+    int pesoTot = 0;
+    Cond espera;
+
+    Procedure Llegada(int Peso){
+    if (not libre) or (pesoTot + Peso > 50000) { 
+        esperando++;
+        wait(espera);
+    }
+    else {
+            libre := false;
+            pesoTot += Peso;
+        }
+    }
+
+    Procedure Proximo(int Peso){
+        pesoTot -= Peso;
+        if (esperando > 0) {
+            esperando--;
+            signal(espera);
+        }
+        else {
+            libre = true;
+        }
+    }
+}
+
+Process Vehículo[id: 1..N]{
+    Puente.Llegada(Peso);
+    Pasar();
+    Puente.Proximo(Peso);
+}
+
