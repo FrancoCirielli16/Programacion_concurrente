@@ -1,0 +1,85 @@
+En un corralón de materiales se deben atender a N clientes de acuerdo con el orden de llegada.
+Cuando un cliente es llamado para ser atendido, entrega una lista con los productos que
+comprará, y espera a que alguno de los empleados le entregue el comprobante de la compra
+realizada.
+
+
+a) Resuelva considerando que el corralón tiene un único empleado.
+
+
+Monitor Corralon{
+    Cola C;
+    Cond espera;
+    text comprobante;
+
+    Procedure Llegar (lista, var comp){ 
+        push (C, lista);
+        wait (espera);
+        comprobante = comp;
+    }
+
+    Procedure Sig (var lista){ 
+        pop (C, lista);
+    }
+
+    Procedure Resultado (comp){ 
+        comprobante = comp;
+        signal (espera);
+    }
+
+}
+
+
+Process Cliente {
+    text lista, comprobante;   
+    Corralon.LLegar(lista,comprobante);
+}
+
+Process Empleado { 
+    text lista, comprobante;
+    Corralon.Sig(lista);
+    comprobante = Crear_Comprobante(lista);
+    Corralon.Resultado(comprobante);
+}
+
+
+b) Resuelva considerando que el corralón tiene E empleados (E > 1).
+
+Monitor Corralon{
+    Cola C;
+    Cond espera;
+    text comprobante;
+
+    Procedure Llegar (lista, var comp){ 
+        push (C, lista);
+        wait (espera);
+        comprobante = comp;
+    }
+
+    Procedure Sig (var lista){ 
+        pop (C, lista);
+    }
+
+    Procedure Resultado (comp){ 
+        comprobante = comp;
+        signal (espera);
+    }
+
+}
+
+
+Process Cliente[id: 0..N-1] {
+    text lista, comprobante;
+    while (true){ 
+        Corralon.LLegar(lista,comprobante);
+    }
+}
+
+Process Empleado [id: 0..N-1] { 
+    text lista, comprobante;
+    while (true){ 
+        Corralon.Sig(lista);
+        comprobante = Crear_Comprobante(lista);
+        Corralon.Resultado(comprobante);
+    }
+}
