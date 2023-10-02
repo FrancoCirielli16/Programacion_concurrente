@@ -40,10 +40,12 @@ Monitor AdministradorCanchas{
   cancha1,cancha2 = true
     Procedure AsignarCancha(var Cancha){
         if(cancha1){
-            Cancha = 1
+            Cancha = 1;
+            cancha1 = False;
 
         }else{
           Cancha = 2
+          cancha2 = False;
         }
     }
 }

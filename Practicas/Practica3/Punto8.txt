@@ -1,0 +1,92 @@
+8. Se debe simular una maratón con C corredores donde en la llegada hay UNA máquina
+expendedoras de agua con capacidad para 20 botellas. 
+
+Además, existe un repositor encargado de reponer las botellas de la máquina. 
+Cuando los C corredores han llegado al inicio comienza la carrera. 
+Cuando un corredor termina la carrera se dirigen a la máquina expendedora, espera
+su turno (respetando el orden de llegada), saca una botella y se retira. 
+
+Si encuentra la máquina sin botellas, le avisa al repositor para que cargue nuevamente la máquina con 20 botellas;
+espera a que se haga la recarga; saca una botella y se retira. Nota: mientras se reponen las
+botellas se debe permitir que otros corredores se encolen. 
+
+
+Monitor llegada{
+
+    cant = 0
+    cond EsperarCorredores
+
+    Procedure llegar_carrera(C){
+        cant++
+        if (cant == C){
+            signal.all(EsperaCorredores)
+        }else{
+             wait(EsperarCorredores)
+        }
+       
+    }
+
+}
+
+Monitor maquina{
+
+    botellas = 20
+    esperando = 0
+    cond Espera
+    cond EsperaCorredores
+
+    Procedure terminar(){
+        if(not libre){ 
+            esperando++;
+            wait(EsperaCorredores);
+        }
+        libre = false
+        botellas--;
+    }
+
+    Procedure retirarse(){
+        if(botellas == 0){
+            signal(Espera)
+        }else{
+            if(esperando>0){
+                esperando--; 
+                signal(EsperaCorredores)
+            }
+            else{
+                libre = true
+            }
+        }
+
+        
+    }
+
+    Procedure re_stockear(){
+        if(botellas > 0){
+            wait(Espera)
+        }
+        botellas = 20;
+        if(esperando>0){
+                esperando--; 
+                signal(EsperaCorredores)
+            }
+            else{
+                libre = true
+            }
+    }
+
+}
+
+
+Process repartidor{
+    While true{
+        maquina.re_stockear();
+    }
+}
+
+Process corredores[id:1..C-1]{
+    llegada.llegar_carrera(C)
+    //se correr la carrera
+    maquina.terminar();
+    //obtiene botella
+    maquina.retirarse();
+}

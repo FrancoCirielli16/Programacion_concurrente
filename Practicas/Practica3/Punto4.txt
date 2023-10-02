@@ -4,6 +4,7 @@ peso (ningún vehículo supera el peso soportado por el puente).
 
 
 
+
 Monitor Puente{
     bool libre = true;
     int esperando = 0;
