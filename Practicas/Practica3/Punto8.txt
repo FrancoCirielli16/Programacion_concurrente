@@ -188,5 +188,5 @@ Process corredores[id:1..C-1]{
     //se correr la carrera
     administrar_maquina.terminar();
     maquina.pedir();
-    maquina.retirarse();
+    administrar_maquina.retirarse();
 }
