@@ -14,10 +14,12 @@ Monitor Equipo[id:1..4]{
     Procedure llegada(var Cancha){
         cant++
         if(cant == 5){
-            AdministradorCancha.AsignarCancha(Cancha)
+                
             signal.all(Espera)
+        }else{
+            wait(Espera)
         }
-        wait(Espera)
+        AdministradorCancha.AsignarCancha(Cancha)
     }
     
 }
