@@ -1,0 +1,128 @@
+SEMÁFOROS
+/*
+Un banco decide entregar promociones a sus clientes por medio
+de su agente de prensa, el cual lo hace de la siguiente manera:
+el agente debe entregar 50 premios entre los 1000 clientes,
+para esto, obtiene al azar un número de cliente y le entrega el
+premio, una vez que este lo toma continúa con la entrega.
+NOTAS:
+    - Cuando los 50 premios han sido entregados el agente y los
+      clientes terminan su ejecución.
+    - No se puede utilizar una estructura de tipo arreglo para
+      almacenar los premios de los clientes.
+*/
+
+
+
+/*
+Resolver con semáforos el siguiente problema. Hay N personas que deben
+usar UN cajero automático de acuerdo al orden de llegada.
+NOTA: sólo se pueden usar los procesos Persona; el uso del cajero por
+parte de una persona se simula llamando a la función UsarCajero().
+*/
+
+
+/*
+Si valorás tu salud mental, no hagas este ejercicio. Yo te avisé.
+
+Resolver con SEMÁFOROS el siguiente problema. En una empresa hay UN
+Coordinador y 30 Empleados que formarán 3 grupos de 10 empleados cada uno.
+Cada grupo trabaja en una sección diferente y debe realizar 345 unidades de un
+producto. Cada empleado al llegar se dirige al coordinador para que le indique el
+número de grupo al que pertenece y una vez que conoce este dato comienza a trabajar
+hasta que se han terminado de hacer las 345 unidades correspondientes al grupo (cada
+unidad es hecha por un único empleado). Al terminar de hacer las 345 unidades los
+10 empleados del grupo se deben juntar para retirarse todos juntos. El coordinador
+debe atender a los empleados de acuerdo al orden de llegada para darle el número de
+grupo (a los 10 primeros que lleguen se le asigna el grupo 1, a los 10 del medio el 2,
+y a los 10 últimos el 3). Cuando todos los grupos terminaron de trabajar el
+coordinador debe informar (imprimir en pantalla) el empleado que más unidades ha
+realizado (si hubiese más de uno con la misma cantidad máxima debe informarlos a
+todos ellos).
+NOTA: maximizar la concurrencia; suponga que existe una función Generar() que simula
+la elaboración de una unidad de un producto.
+*/
+
+
+
+
+/*
+Resolver con SEMÁFOROS el siguiente problema. Simular un examen
+técnico para concursos no-docentes en la Facultad, en el mismo
+participan 100 personas distribuidas en 4 concursos (25 personas
+en cada concurso) con un coordinador en cada una de ellos. Cada
+persona ya conoce en que concurso participa. El coordinador de
+cada concurso espera hasta que lleguen las 25 personas
+correspondientes al mismo, les entrega el examen a resolver
+(el mismo para todos los de ese concurso), y luego corrige los
+examenes de esas 25 personas de acuerdo al orden en que van
+entregando. Cada persona al llegar debe esperar a que su
+coordinador (el que corresponde a su concurso) le dé el examen,
+lo resuelve, lo entrega para que su coordinador lo evalúe y espera
+hasta que le deje la nota para luego retirarse.
+Nota: maximizar la concurrencia; sólo usar los procesos que representen
+a las personas y a los coordinadores; todos los procesos deben terminar.
+*/
+
+
+
+
+MONITORES
+/*
+Resolver con monitores el siguiente problema. Una empresa tiene 40
+empleados que forman 4 equipos de trabajo (cada empleado conoce a
+priori a que equipo pertenece). La empresa tiene 4 combis para
+trasladar cada equipo a la planta de trabajo que le corresponda.
+Cada empleado al llegar sube a la combi que le corresponde a su
+equipo, cuando las 4 combis están 0completas cada una de ellas
+parte a la planta correspondiente. El traslado dura un tiempo
+aleatorio entre 5 y 20 minutos. Al llegar a su sector cada empleado
+realiza su trabajo y luego se retira de la planta (cada empleado
+se retira independientemente del resto).
+Nota: por simplicidad los empleados no se deben esperar para retirarse.
+*/
+
+
+
+
+
+/*
+Resolver con MONITORES el siguiente problema. En un Crucero por
+el Mediterráneo hay 200 personas que deben subir al barco por
+medio de 10 lanchas con 20 lugares cada una. Cada persona sube a
+la lancha que le corresponde. Cuando en una lancha han subido sus
+20 personas, durante 5 minutos navega hasta el barco. Recién cuando
+han llegado las 10 lanchas al barco se les permite a las 200
+personas subir al barco. 
+NOTA: suponga que cada persona llama a la función
+int NúmeroDeLancha() que le devuelve un valor entre 0 y 9
+indicando la lancha a la que debe subir. Maximizar la concurrencia.
+*/
+
+
+
+
+/*
+Resolver con monitores la siguiente situación. En la guardia de traumatología
+de un hospital trabajan 5 médicos y una enfermera. A la guardia acuden P
+Pacientes que al llegar se dirigen a la enfermera para que le indique a que
+médico se debe dirigir y cuál es su gravedad (entero entre 1 y 10). Cuando
+tiene estos datos se dirige al médico correspondiente y espera hasta que lo
+termine de atender para retirarse. Cada médico atiende a sus pacientes en
+orden de acuerdo a la gravedad de cada uno.
+Nota: maximizar la concurrencia.
+*/
+
+
+
+
+/*
+Resolver el siguiente problema utilizando monitores.
+Un equipo de videoconferencia puede ser usado por una persona a la vez 
+Hay P personas que utilizan este equipo (una unica vez cada uno) para
+su trabajo, de acuerdo a su prioridad. La prioridad de cada persona
+está dada por un numero entero positivo. Ademas existe un administrador
+que cada 3hs incrementa en 1 la prioridad de todas las personas que
+están esperando usar el equipo.
+NOTA: maximizar la concurrencia.
+*/

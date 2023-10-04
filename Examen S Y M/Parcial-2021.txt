@@ -1,0 +1,10 @@
+1. Resolver con SEMÁFOROS el siguiente problema. Simular un examen técnico para concursos Nodocentes
+en la Facultad, en el mismo participan 100 personas distribuidas en 4 concursos (25 personas en cada
+concurso) con un coordinador en cada una de ellos. Cada persona ya conoce en que concurso participa. El
+coordinador de cada concurso espera hasta que lleguen las 25 personas correspondientes al mismo, les
+entrega el examen a resolver (el mismo para todos los de ese concurso), y luego corrige los exámenes de esas
+25 personas de acuerdo al orden en que van entregando. Cada persona al llegar debe esperar a que su
+coordinador (el que corresponde a su concurso) le dé el examen, lo resuelve, lo entrega para que su
+coordinador lo evalúe y espera hasta que le deje la nota para luego retirarse. Nota: maximizar la concurrencia;
+sólo usar los procesos que representes a las personas y a los coordinadores; todos los procesos deben
+terminar.

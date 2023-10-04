@@ -1,0 +1,284 @@
+
+1- Mencione al menos 3 ejemplos donde pueda encontrarse concurrencia
+
+Los sistemas biológicos,Retiros de cajeros,Peticiones a APIS,Whatsapp,Redes P2P
+
+
+2- Escriba una definición de concurrencia. Diferencie procesamiento secuencial, concurrente y paralelo.
+
+
+Concurrencia es la capacidad de ejecutar múltiples actividades en paralelo o simultáneamente.
+Permite a distintos objetos actuar al mismo tiempo.
+Factor relevante para el diseño de hardware, sistemas operativos, 
+multiprocesadores, computación distribuida, programación y diseño. 
+
+
+Los conceptos de procesamiento secuencial, concurrente y paralelo:
+
+
+Procesamiento Secuencial:
+
+En el procesamiento secuencial, las tareas se ejecutan una después de la otra, en secuencia.
+Cada tarea debe esperar a que la tarea anterior se complete antes de comenzar su ejecución.
+Es el tipo más simple de procesamiento y no aprovecha la capacidad de los sistemas multiprocesador o multinúcleo.
+Procesamiento Concurrente:
+
+En el procesamiento concurrente, múltiples tareas se ejecutan de manera aparentemente simultánea.
+Las tareas pueden intercalarse en la ejecución y avanzar incluso si otras están en curso.
+Este enfoque se utiliza comúnmente en sistemas operativos para administrar múltiples tareas o hilos de ejecución, lo que permite una mejor utilización de los recursos de la CPU.
+Procesamiento Paralelo:
+
+El procesamiento paralelo implica la ejecución real simultánea de múltiples tareas en múltiples núcleos o procesadores.
+Cada núcleo o procesador ejecuta una tarea independiente de manera simultánea con otros.
+Es especialmente eficiente para tareas altamente intensivas en cómputo y puede ofrecer un rendimiento significativamente mejorado en comparación con la ejecución secuencial o concurrente.
+
+
+3- Describa el concepto de deadlock y qué condiciones deben darse para que ocurra.
+
+El concepto de deadlock explica como cuando un proceso queda bloqueados en un estado esperando y 
+ningun otro proceso puede continuar la ejecución
+
+Dos (o más) procesos pueden entrar en deadlock, si por error de
+programación ambos se quedan esperando que el otro libere un
+recurso compartido. La ausencia de deadlock es una propiedad
+necesaria en los procesos concurrentes.
+
+4 propiedades necesarias y suficientes para que exista deadlock
+son:
+
+Recursos reusables serialmente: los procesos comparten recursos que
+pueden usar con exclusión mutua.
+
+Adquisición incremental: los procesos mantienen los recursos que
+poseen mientras esperar adquirir recursos adicionales.
+
+No-preemption: una vez que son adquiridos por un proceso, los
+recursos no pueden quitarse de manera forzada sino que sólo son
+liberados voluntariamente.
+
+Espera cíclica: existe una cadena circular (ciclo) de procesos tal que
+cada uno tiene un recurso que su sucesor en el ciclo está esperando
+adquirir
+
+
+
+
+4- Defina inanición. Ejemplifique.
+
+inanición de un proceso (succede cuando no logra acceder a los recursos compartidos)
+
+5- ¿Qué entiende por no determinismo? 
+
+No hay un orden preestablecido en la ejecución, basicamente es el concepto al cual nos referimos cuando no es posible determinar con certeza los resultados posibles de un proceso=> no determinismo (ejecuciones con la misma “entrada” puede generar diferentes “salidas”)
+
+¿Cómo se aplica este concepto a la ejecución concurrente?
+
+Interleaving no determinista: 
+Cuando varios hilos compiten por recursos compartidos, 
+el orden en el que se ejecutan las instrucciones de cada hilo puede variar de una ejecución a otra. 
+Esto puede dar lugar a resultados diferentes según el orden en que se realicen las operaciones.
+
+
+6- Defina comunicación. Explique los mecanismos de comunicación que conozca.
+
+La comunicación entre procesos concurrentes indica el modo en
+que se organizan y trasmiten datos entre tareas concurrentes.
+Esta organización requiere especificar protocolos para controlar
+
+el progreso y la corrección. Los procesos se COMUNICAN:
+• Por Memoria Compartida.
+• Por Pasaje de Mensajes
+
+Memoria compartida
+▪ Los procesos intercambian información sobre la memoria compartida o
+actúan coordinadamente sobre datos residentes en ella.
+▪ Lógicamente no pueden operar simultáneamente sobre la memoria
+compartida, lo que obliga a bloquear y liberar el acceso a la memoria.
+
+• Pasaje de mensajes
+▪ Es necesario establecer un canal (lógico o físico) para transmitir información
+entre procesos.
+▪ También el lenguaje debe proveer un protocolo adecuado.
+
+
+7- a) Defina sincronización. Explique los mecanismos de sincronización que conozca.
+
+La sincronización es la posesión de información acerca de otro proceso para
+coordinar actividades. 
+Los procesos se sincronizan:
+• Por exclusión mutua.
+• Por condición.
+
+Sincronización por exclusión mutua
+▪ Asegurar que sólo un proceso tenga acceso a un recurso compartido en un
+instante de tiempo.
+
+Sincronización por condición
+▪ Permite bloquear la ejecución de un proceso hasta que se cumpla una
+condición dada.
+
+
+b) ¿En un programa concurrente pueden estar presentes más de un mecanismo de sincronización? En caso afirmativo, ejemplifique
+
+Si. Ejemplo de los dos mecanismos de sincronización en un problema de utilización de
+un área de memoria compartida (buffer limitado con productores y consumidores)
+
+
+
+8- ¿Qué significa el problema de “interferencia” en programación concurrente? ¿Cómo puede evitarse?
+
+Interferencia: un proceso toma una acción que invalida las suposiciones
+hechas por otro proceso. => Otra manera de decirlo 
+
+el problema de interferencia en programación concurrente se refiere a la situación en la que dos o más procesos acceden o modifican compartimentos de memoria compartidos de manera concurrente, 
+y sus operaciones pueden superponerse de tal manera que el resultado final es impredecible o incorrecto. 
+Esto se puede evitar utilizando semaforos,monitores,Locks,Exlucion mutua,etc
+
+9- ¿En qué consiste la propiedad de “A lo sumo una vez” y qué efecto tiene sobre las sentencias de un
+programa concurrente? De ejemplos de sentencias que cumplan y de sentencias que no cumplan con ASV.
+
+Si una sentencia de asignación cumple la propiedad ASV, entonces
+su ejecución parece atómica, pues la variable compartida será leída o escrita sólo una vez.
+
+
+
+Una sentencia de asignación x = e satisface la propiedad de “A lo sumo una
+vez” si:
+
+1) e contiene a lo sumo una referencia crítica y x no es referenciada por
+otro proceso, o
+
+2) e no contiene referencias críticas, en cuyo caso x puede ser leída por
+otro proceso.
+
+Ejemplos:
+
+int x=0, y=0;       No hay ref. críticas en ningún proceso.
+co x=x+1 // y=y+1 oc;   En todas las historias x = 1 e y = 1
+
+int x = 0, y = 0;       El 1er proceso tiene 1 ref. crítica. El 2do ninguna.
+co x=y+1 // y=y+1 oc;       Siempre y = 1 y x = 1 o 2
+
+
+
+10- Dado el siguiente programa concurrente:
+
+x = 2; y = 4; z = 3;
+
+co
+ x = y - z // z = x * 2 // y = y - 1
+oc
+
+a) ¿Cuáles de las asignaciones dentro de la sentencia co cumplen con ASV?. Justifique claramente.
+
+x = y - z: Esta asignación contiene una referencia crítica, ya que involucra a y y z, pero puede estár siendo referenciada por otro proceso ya que se z = x*2 esta leyendo x. Por lo tanto, no cumple con ASV.
+
+z = x * 2: Esta asignación contiene una referencia crítica, ya que involucra a x, pero está siendo referenciada por otro proceso ya que y esta siendo leida en x = y - z. Por lo tanto, no cumple con ASV.
+
+y = y - 1: Esta asignación contiene una referencia crítica, ya que involucra a 'y,' pero también puede estar siendo referenciada por otro proceso, ya que 'y' está siendo leída en 'x = y - z' antes de ser modificada. Por lo tanto, no cumple con ASV."
+
+
+b) Indique los resultados posibles de la ejecución
+
+Secuencia normal sin interferencia:
+
+x = 2
+y = 4
+z = 3
+x = y - z (x = 1)
+z = x * 2 (z = 2)
+y = y - 1 (y = 3)
+
+Interferencia entre x = y - z y z = x * 2:
+
+x = 2
+y = 4
+z = 3
+x = y - z (x = 1)
+z = x * 2 (z = 4, pero x es 2 en este momento)
+y = y - 1 (y = 3)
+
+Interferencia entre y = y - 1 y x = y - z:
+
+x = 2
+y = 4
+z = 3
+x = y - z (x = 0, pero y es 3 en este momento)
+z = x * 2 (z = 0)
+y = y - 1 (y = 3)
+
+
+Nota 1: las instrucciones NO SON atómicas.
+Nota 2: no es necesario que liste TODOS los resultados, pero si los que sean representativos de las
+diferentes situaciones que pueden darse.
+
+
+11- Defina acciones atómicas condicionales e incondicionales. Ejemplifique.
+
+Acciones Atómicas Incondicionales: 
+Son operaciones que se ejecutan sin importar ninguna condición o restricción. 
+Estas acciones se realizan en su totalidad sin interrupciones y no pueden ser divididas en partes más pequeñas por otros procesos.
+
+Await general: <await (s>0) s=s-1>;
+
+Acciones Atómicas Condicionales:
+Son operaciones que se ejecutan solo si se cumple una condición específica.
+Estas acciones son ejecutadas de manera atómica solo si la condición dada es verdadera en ese momento.
+
+Ejemplo await para sincronización por condición: <await (count > 0) >
+
+
+12- Defina propiedad de seguridad y propiedad de vida.
+
+Una propiedad de un programa concurrente es un atributo verdadero en
+cualquiera de las historias de ejecución del mismo
+Toda propiedad puede ser formulada en términos de dos clases: seguridad y
+vida.
+
+seguridad (safety)
+▪ Nada malo le ocurre a un proceso: asegura estados consistentes.
+▪ Una falla de seguridad indica que algo anda mal.
+▪ Ejemplos de propiedades de seguridad: exclusión mutua, ausencia de
+interferencia entre procesos, partial correctness.
+
+vida (liveness)
+▪ Eventualmente ocurre algo bueno con una actividad: progresa, no hay
+deadlocks.
+▪ Una falla de vida indica que las cosas dejan de ejecutar.
+▪ Ejemplos de vida: terminación, asegurar que un pedido de servicio será
+atendido, que un mensaje llega a destino, que un proceso eventualmente
+alcanzará su SC, etc  dependen de las políticas de scheduling.
+
+
+13- ¿Qué es una política de scheduling? Relacione con fairness. ¿Qué tipos de fairnes conoce? 
+
+
+
+Una política de scheduling se refiere a un conjunto de reglas o algoritmos utilizados para determinar el orden en el que los procesos o tareas deben ser programados para su ejecución en un sistema concurrente o multiprocesador. 
+Estas políticas de scheduling se utilizan para gestionar la asignación de recursos del sistema (como la CPU) a procesos o hilos, con el objetivo de lograr una ejecución eficiente y equitativa de las tareas.
+
+
+Fairness Incondicional. 
+
+Una política de scheduling es incondicionalmente
+fair si toda acción atómica incondicional que es elegible eventualmente es
+ejecutada.
+En el ejemplo anterior, RR es incondicionalmente fair en monoprocesador, y
+la ejecución paralela lo es en un multiprocesador.
+
+Fairness Débil. 
+
+Una política de scheduling es débilmente fair si:
+
+(1) Es incondicionalmente fair y
+(2) Toda acción atómica condicional que se vuelve elegible eventualmente es
+ejecutada, asumiendo que su condición se vuelve true y permanece true
+hasta que es vista por el proceso que ejecuta la acción atómica
+condicional.
+
+Fairness Fuerte. 
+
+Una política de scheduling es fuertemente fair si:
+(1) Es incondicionalmente fair y
+(2) Toda acción atómica condicional que se vuelve elegible eventualmente es
+ejecutada pues su guarda se convierte en true con infinita frecuencia.
