@@ -1,12 +1,237 @@
 1. SEMÁFOROS. 
 Existen 15 sensores de temperatura y 2 módulos centrales de procesamiento. 
-Un sensor mide la temperatura cada cierto tiempo (función medir()), la envía al módulo central para que le indique qué acción debe hacer (un número del 1 al 10) (función determinar() para el módulo central) y la hace (función realizar()). 
+Un sensor mide la temperatura cada cierto tiempo (función medir()), 
+la envía al módulo central para que le indique qué acción debe hacer (un número del 1 al 10) (función determinar() para el módulo central) y la hace (función realizar()). 
 Los módulos atienden las mediciones por orden de llegada.
+
+#OPCION 1
+
+Cola temp;
+sem mutex = 1
+sem pedido = 0
+
+Procces Sensores[id:1..15]{
+    While true{
+        temperatura = medir()
+        P(mutex)
+        temp.push(determinar(temperatura))
+        V(mutex)
+        V(pedido)
+        Delay(tiempo)
+    }
+}
+
+
+Procces Centrales[id:1..2]{
+    While true{
+        P(pedido)
+        P(mutex)
+        acción = temp.pop()
+        V(mutex)
+        realizar(acción)
+    }
+}
+
+#OPCION 2
+
+Cola temp;
+sem mutex = 1
+
+
+Procces Sensores[id:1..15]{
+    While true{
+        temperatura = medir()
+        P(mutex)
+        temp.push(id,determinar(temperatura))
+        V(mutex)
+      
+    }
+}
+
+
+Procces Centrales[id:1..2]{
+    While true{
+        P(mutex)
+        if(!isEmpty(temp)){
+            id,acción = temp.pop()
+            V(mutex)
+            realizar(id,acción)
+        }else{
+             V(mutex)
+        }
+        
+    }
+}
+
 
 2. MONITORES. 
 Una boletería vende E entradas para un partido, y hay P personas (P>E) que quieren comprar. 
 Se las atiende por orden de llegada y la función vender() simula la venta. 
 La boletería debe informarle a la persona que no hay más entradas disponibles o devolverle el número de entrada si pudo hacer la compra.
 
+
+Monitor administrar_entradas{
+    entradas = E
+    Esperando = 0
+    libre = true
+    cond Espera
+    
+    Procedure Recepcion(var hayEntradas){
+        hayEntradas = Entradas>0
+        if(hayEntradas){
+            if(not libre){
+                Esperando++;
+                wait (Espera)
+            }else{
+                libre = false
+            }
+        }
+    }
+
+
+    Procedure Retirar(var numero){
+        numero = vender()
+        entradas--;
+        if(esperando>0){
+            esperando--;
+            signal(Espera);
+        }else{
+            libre = true;
+        }
+    }
+}
+
+
+Procces persona[id:1..P]{
+    hayEntradas = false;
+    administrar_entradas.Recepcion(hayEntradas)
+    if(hayEntradas){
+        numero
+        administrar_entradas.Retirar(numero);
+    }
+}
+
+
+
+#JUAN 
+
+
+Monitor administrar_entradas{
+    entradas = E
+    Esperando = 0
+    libre = true
+    cond Espera
+    
+    Procedure Recepcion(){
+            if(not libre){
+                Esperando++;
+                wait (Espera)
+            }else{
+                libre = false
+            }
+        }
+
+
+    Procedure Retirar(var numero){
+        if(entradas>0){
+            numero = vender()
+            entradas--;
+        }
+        if(esperando>0){
+            esperando--;
+            signal(Espera);
+        }else{
+            libre = true;
+        }
+    }
+}
+
+
+Procces persona[id:1..P]{
+    administrar_entradas.Recepcion()
+    numero
+    administrar_entradas.Retirar(numero);
+}
+
+
+#teniendo en cuenta que se pueden seguir encolando
+
+Monitor administrar_entradas{
+    
+    Esperando = 0
+    libre = true
+    cond Espera
+    
+    Procedure Recepcion(){
+        if(not libre){
+            Esperando++;
+            wait (Espera)
+        }else{
+            libre = false
+        }
+    }
+
+
+    Procedure Retirar(var numero){
+        if(esperando>0){
+            esperando--;
+            signal(Espera);
+        }else{
+            libre = true;
+        }
+    }
+}
+
+Monitor Entradas{
+    entradas = E
+
+    Procedure comprar(var numero){
+        if(entradas>0){
+            numero = vender()
+            entradas--
+        }
+    }
+}
+
+
+Procces persona[id:1..P]{
+    administrar_entradas.Recepcion()
+    numero 
+    Entradas.comprar(numero)
+    administrar_entradas.Retirar(numero);
+}
+
 3. MONITORES. 
 Por un puente turístico puede pasar sólo un auto a la vez. Hay N autos que quieren pasar (función pasar()) y lo hacen por orden de llegada.
+
+
+Monitor Puente{
+    cond Espera
+    esperando = 0;
+    libre = true;
+
+    Procedure Llegar(){
+        if(not libre){
+            esperando++;
+            wait (Espera)
+        }else{
+            libre = false;
+        }
+    }
+
+
+    Procedure Proximo(){
+        if(esperando>0){
+            esperando--;
+            signal(esperando)
+        }else{
+            libre = true;
+        }
+    }
+}
+
+Procces Auto[id:1..N]{
+    Puente.Llegar();
+    pasar()
+    Puente.Proximo()
+}

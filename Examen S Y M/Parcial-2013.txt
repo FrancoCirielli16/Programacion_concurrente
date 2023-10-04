@@ -12,11 +12,13 @@ iniciado = 0
 sem mutex = 1
 sem todos = 0
 sem comenzar[1..P] = ([P],0);
-array int tarea[1..P] = ([P],0)
+array int resultado[1..P]
 cola t
-sem mutex_cola = 1
-Procces periférico[id:1..P]{
 
+
+
+Procces periférico[id:1..P]{
+    
     P(mutex)
     iniciado++
     if(iniciado == P){
@@ -24,20 +26,21 @@ Procces periférico[id:1..P]{
     }
     V(mutex)
     
-    P(comenzar[id])
-    //Hacer algo para la central
-    V(fin)
-
-
-    
+    While true{
+        P(comenzar[id])
+        resultado[id] = realizar_tarea()
+        V(fin)
+    }    
 }
 
 Procces CENTRAL{
     P(todos)
     while true {
-        V(comenzar[TrabajoProcesoCentral()])
+        int periferico = TrabajoProcesoCentral()
+        V(comenzar[periferico])
         P(fin)
-        // Hacer algo con el resultado
+        resultado = resultado[periferico]
+        //trabaja con el resultado
     }
     
 }
@@ -55,23 +58,27 @@ Monitor Servidor {
     int usuarios_actuales = 0;
     cond espera;
     cond usuarios;
+    libre = true
 
     Procedure IngresarUsuario() {
-        if (not libre)and(usuarios_actuales >= 10) {
+        if (not libre){
+            esperando++;
             wait(espera);
         }
-        libre = false;
         usuarios_actuales++;
+        if(usuarios_actuales==10){
+            libre = false;
+        }
+        
     }
 
     Procedure SalirUsuario() {
-        if (usuarios_actuales > 0) {
-            usuarios_actuales--;
-            signal(usuarios);
-        } 
-        else {
-            libre = true;
+        usuarios_actuales--;
+        libre = true;
+        if (esperando > 0) {
+            signal(espera);
         }
+        
     }
 
    
@@ -83,6 +90,4 @@ Process Usuario[id: 1..N] {
     Servidor.SalirUsuario();    
 }
 
-Process Administrador {
-    Servidor.Administrar();  
-}
+

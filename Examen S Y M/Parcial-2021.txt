@@ -8,3 +8,53 @@ coordinador (el que corresponde a su concurso) le dé el examen, lo resuelve, lo
 coordinador lo evalúe y espera hasta que le deje la nota para luego retirarse. Nota: maximizar la concurrencia;
 sólo usar los procesos que representes a las personas y a los coordinadores; todos los procesos deben
 terminar.
+
+
+sem todos[1..4] = ([4], 0)
+sem esperandoNota[1..100]
+sem mutex[1..4] = ([4], 1)
+array contador[1..4] = ([4], 0)
+array colas[1..4];
+sem mutexcolas[1..4] = ([4],1)
+
+Procces personas[id:1..100]{
+    int Miconcurso;
+
+    P(mutex[Miconcurso]);
+    contador[Miconcurso]++;
+    if(contador[Miconcurso] == 25){
+        V(todos[Miconcurso])
+    }
+    V(mutex[Miconcurso]);
+    
+    P(examen[Miconcurso])
+    
+    //resuelvo examen
+    P(mutexcolas[Miconcurso])
+    colas[Miconcurso].push(id)
+    V(mutexcolas[Miconcurso])
+    V(entregado)
+    P(esperandoNota[id])
+}
+
+Procces coordinadores[id:1..4]{
+    P(todos[id])
+    for i=0 i<25; i++ {
+        V(examen[id])
+    }
+
+    
+    for i=0 i<25; i++ {
+        P(entregado)
+
+        P(mutexcolas[id])
+        id_persona = colas[id].pop()
+        V(mutexcolas[id_persona])
+
+        //corrige examen
+
+        V(esperandoNota[id_persona])
+    }
+    
+
+}
