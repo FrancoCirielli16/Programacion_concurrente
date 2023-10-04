@@ -43,7 +43,7 @@ de desarrollo, aplicaciones.
 
 <h2>Cuestionarios Resueltos</h2>
 
-- [Clases Teóricas 1 y 2 ](Cuestionarios/Cuestionario1y2/)
+- [Clases Teóricas 1 y 2 ](Cuestionarios/Cuestionario1y2.txt/)
 - [Clases Teóricas 3 y 4 ](Cuestionarios/preguntas-clases-3y4.pdf/)
 - [Clases Teóricas 5 ](Cuestionarios/preguntas-clases-5.pdf/)
 
