@@ -25,10 +25,7 @@ Procces periférico[id:1..P]{
     V(mutex)
     
     P(comenzar[id])
-    //Hace la tarea pedida
-    P(mutex_cola)
-    t.push(TrabajoProcesoCentral())
-    V(mutex_cola)
+    //Hacer algo para la central
     V(fin)
 
 
@@ -37,49 +34,21 @@ Procces periférico[id:1..P]{
 
 Procces CENTRAL{
     P(todos)
-    for(int i = 0; i<P; i++){
-        V(comenzar[i])
+    while true {
+        V(comenzar[TrabajoProcesoCentral()])
+        P(fin)
+        // Hacer algo con el resultado
     }
-    P(fin)
-    P(mutex_cola)
-    tarea = t.pop()
-    V(mutex_cola)
-    // Hacer algo con el resultado
     
-
 }
 
 
-2 - Resolver con PMS el siguiente problema: 
-Se debe administrar el acceso para usar en determinado Servidor donde no se permite más de 10 usuarios trabajando al mismo tiempo, por cuestiones de rendimiento. 
+2 -Se debe administrar el acceso para usar en determinado Servidor donde no se permite más de 10 usuarios trabajando al mismo tiempo, por cuestiones de rendimiento. 
 Existen N usuarios que solicitan acceder al Servidor, esperan hasta que se les de acceso para trabajar en él y luego salen del mismo.
 Nota: suponga que existe una función TrabajarEnServidor() que llaman los representar que están trabajando en el Servidor
 
 #OPCION A PREGUNTAR
-Monitor Servidor {
 
-    int lectores_actuales = 0;  
-    cond espera
-
-    Procedure IngresarUsuario() {
-        lectores_actuales++;
-        if (lectores_actuales == 10) {
-            signal.all(espera)
-        }else{
-            wait(espera)
-        }
-    }
-
-    Procedure SalirUsuario() {
-        if(lectores_actuales){
-             lectores_actuales--;
-        }
-        lectores_actuales--;
-        signal;  
-    }
-
-   
-}
 
 Monitor Servidor {
 
@@ -88,9 +57,10 @@ Monitor Servidor {
     cond usuarios;
 
     Procedure IngresarUsuario() {
-        if (usuarios_actuales >= 10) {
+        if (not libre)and(usuarios_actuales >= 10) {
             wait(espera);
         }
+        libre = false;
         usuarios_actuales++;
     }
 
@@ -98,6 +68,9 @@ Monitor Servidor {
         if (usuarios_actuales > 0) {
             usuarios_actuales--;
             signal(usuarios);
+        } 
+        else {
+            libre = true;
         }
     }
 

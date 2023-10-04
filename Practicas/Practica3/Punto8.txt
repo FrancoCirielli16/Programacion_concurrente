@@ -90,3 +90,103 @@ Process corredores[id:1..C-1]{
     //obtiene botella
     maquina.retirarse();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Correcion#
+
+
+
+
+
+
+Monitor llegada{
+
+    cant = 0
+    cond EsperarCorredores
+
+    Procedure llegar_carrera(C){
+        cant++
+        if (cant == C){
+            signal.all(EsperaCorredores)
+        }else{
+             wait(EsperarCorredores)
+        }
+       
+    }
+
+}
+
+Monitor administrar_maquina{
+    libre = true;
+    esperando = 0
+    cond Espera
+    cond EsperaCorredores
+
+    Procedure terminar(){
+        if(not libre){ 
+            esperando++;
+            wait(EsperaCorredores);
+        }
+        libre = false
+    }
+
+    Procedure retirarse(){
+        if(esperando>0){
+            esperando--; 
+            signal(EsperaCorredores)
+        }
+            else{
+                libre = true
+            }
+        }        
+    }
+
+    Monitor maquina{
+
+    botellas = 20
+    cond Espera
+
+    Procedure Pedir(){
+        if(botellas == 0){ 
+           signal(espera);
+           wait(EsperanoBotella);
+        }
+        botellas--;
+    }
+
+    
+    Procedure re_stockear(){
+        if(botellas > 0){
+            wait(Espera)
+        }
+        botellas = 20;
+        signal(EsperandoBotella);
+    }
+
+}
+
+
+Process repartidor{
+    While true{
+        maquina.re_stockear();
+    }
+}
+
+Process corredores[id:1..C-1]{
+    llegada.llegar_carrera(C)
+    //se correr la carrera
+    administrar_maquina.terminar();
+    maquina.pedir();
+    administrar_maquina.retirarse();
+}

@@ -14,10 +14,12 @@ Monitor Equipo[id:1..4]{
     Procedure llegada(var Cancha){
         cant++
         if(cant == 5){
-            AdministradorCancha.AsignarCancha(Cancha)
+                
             signal.all(Espera)
+        }else{
+            wait(Espera)
         }
-        wait(Espera)
+        AdministradorCancha.AsignarCancha(Cancha)
     }
     
 }
@@ -51,8 +53,8 @@ Monitor AdministradorCanchas{
 }
 
 Process Jugador(){
-    int miEquipo 
-    int Cancha
+    int miEquipo = DarEquipo()
+    int Cancha = 0
     Equipo[miEquipo].llegada(Cancha);
     Canchas[Cancha].Juego();
 }
