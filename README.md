@@ -49,7 +49,6 @@ de desarrollo, aplicaciones.
 - [Cuestionarios clase 5](Cuestionarios/preguntas-clases-5.pdf/)
 
 
-
 <h2>Practicas</h2>
 
 - [Variables Compartidas](Practicas/Practica1)
