@@ -21,11 +21,13 @@ Procesamiento Secuencial:
 En el procesamiento secuencial, las tareas se ejecutan una después de la otra, en secuencia.
 Cada tarea debe esperar a que la tarea anterior se complete antes de comenzar su ejecución.
 Es el tipo más simple de procesamiento y no aprovecha la capacidad de los sistemas multiprocesador o multinúcleo.
+
 Procesamiento Concurrente:
 
 En el procesamiento concurrente, múltiples tareas se ejecutan de manera aparentemente simultánea.
 Las tareas pueden intercalarse en la ejecución y avanzar incluso si otras están en curso.
 Este enfoque se utiliza comúnmente en sistemas operativos para administrar múltiples tareas o hilos de ejecución, lo que permite una mejor utilización de los recursos de la CPU.
+
 Procesamiento Paralelo:
 
 El procesamiento paralelo implica la ejecución real simultánea de múltiples tareas en múltiples núcleos o procesadores.
@@ -65,7 +67,15 @@ adquirir
 
 4- Defina inanición. Ejemplifique.
 
-inanición de un proceso (succede cuando no logra acceder a los recursos compartidos)
+La inanición es una situación en la que un proceso o hilo en un sistema concurrente no puede avanzar o realizar su trabajo debido a la incapacidad de acceder a los recursos compartidos o a las condiciones necesarias para su ejecución. 
+Esto puede deberse a que otros procesos tienen prioridad sobre él y constantemente obtienen acceso a los recursos, 
+dejando al proceso en estado de espera indefinida.
+
+Ejemplo:
+En un sistema operativo con múltiples procesos compitiendo por el acceso a una impresora compartida. 
+Cada proceso necesita imprimir un documento en la impresora.
+Si se implementa una política de asignación de recursos que siempre otorga acceso a la impresora al mismo grupo de procesos o al proceso de mayor prioridad, 
+otros procesos con menor prioridad pueden quedar en estado de inanición
 
 5- ¿Qué entiende por no determinismo? 
 
@@ -83,9 +93,9 @@ Esto puede dar lugar a resultados diferentes según el orden en que se realicen 
 
 La comunicación entre procesos concurrentes indica el modo en
 que se organizan y trasmiten datos entre tareas concurrentes.
-Esta organización requiere especificar protocolos para controlar
+Esta organización requiere especificar protocolos para controlar el progreso y la corrección. 
 
-el progreso y la corrección. Los procesos se COMUNICAN:
+Los procesos se COMUNICAN:
 • Por Memoria Compartida.
 • Por Pasaje de Mensajes
 
@@ -95,7 +105,7 @@ actúan coordinadamente sobre datos residentes en ella.
 ▪ Lógicamente no pueden operar simultáneamente sobre la memoria
 compartida, lo que obliga a bloquear y liberar el acceso a la memoria.
 
-• Pasaje de mensajes
+Pasaje de mensajes
 ▪ Es necesario establecer un canal (lógico o físico) para transmitir información
 entre procesos.
 ▪ También el lenguaje debe proveer un protocolo adecuado.
@@ -105,6 +115,7 @@ entre procesos.
 
 La sincronización es la posesión de información acerca de otro proceso para
 coordinar actividades. 
+
 Los procesos se sincronizan:
 • Por exclusión mutua.
 • Por condición.
@@ -131,7 +142,8 @@ Interferencia: un proceso toma una acción que invalida las suposiciones
 hechas por otro proceso. => Otra manera de decirlo 
 
 el problema de interferencia en programación concurrente se refiere a la situación en la que dos o más procesos acceden o modifican compartimentos de memoria compartidos de manera concurrente, 
-y sus operaciones pueden superponerse de tal manera que el resultado final es impredecible o incorrecto. 
+y sus operaciones pueden superponerse de tal manera que el resultado final es impredecible o incorrecto.
+
 Esto se puede evitar utilizando semaforos,monitores,Locks,Exlucion mutua,etc
 
 9- ¿En qué consiste la propiedad de “A lo sumo una vez” y qué efecto tiene sobre las sentencias de un
@@ -175,7 +187,7 @@ x = y - z: Esta asignación contiene una referencia crítica, ya que involucra a
 
 z = x * 2: Esta asignación contiene una referencia crítica, ya que involucra a x, pero está siendo referenciada por otro proceso ya que y esta siendo leida en x = y - z. Por lo tanto, no cumple con ASV.
 
-y = y - 1: Esta asignación contiene una referencia crítica, ya que involucra a 'y,' pero también puede estar siendo referenciada por otro proceso, ya que 'y' está siendo leída en 'x = y - z' antes de ser modificada. Por lo tanto, no cumple con ASV."
+y = y - 1: Esta asignación contiene una referencia crítica, ya que involucra a 'y,' pero también puede estar siendo referenciada por otro proceso, ya que 'y' está siendo leída en 'x = y - z' antes de ser modificada. Por lo tanto, cumple con ASV."
 
 
 b) Indique los resultados posibles de la ejecución
@@ -230,24 +242,23 @@ Ejemplo await para sincronización por condición: <await (count > 0) >
 
 12- Defina propiedad de seguridad y propiedad de vida.
 
-Una propiedad de un programa concurrente es un atributo verdadero en
-cualquiera de las historias de ejecución del mismo
-Toda propiedad puede ser formulada en términos de dos clases: seguridad y
-vida.
 
 seguridad (safety)
-▪ Nada malo le ocurre a un proceso: asegura estados consistentes.
-▪ Una falla de seguridad indica que algo anda mal.
-▪ Ejemplos de propiedades de seguridad: exclusión mutua, ausencia de
-interferencia entre procesos, partial correctness.
 
-vida (liveness)
-▪ Eventualmente ocurre algo bueno con una actividad: progresa, no hay
-deadlocks.
-▪ Una falla de vida indica que las cosas dejan de ejecutar.
-▪ Ejemplos de vida: terminación, asegurar que un pedido de servicio será
-atendido, que un mensaje llega a destino, que un proceso eventualmente
-alcanzará su SC, etc  dependen de las políticas de scheduling.
+Esta propiedad se refiere a la garantía de que "nada malo le ocurre a un proceso" o, en otras palabras, 
+que no se producen estados inconsistentes o resultados incorrectos debido a la ejecución concurrente.
+
+ Una falla de seguridad indica que algo anda mal.
+ Ejemplos de propiedades de seguridad: exclusión mutua, ausencia de interferencia entre procesos, partial correctness.
+
+Vida (liveness)
+Esta propiedad se relaciona con la garantía de que "eventualmente ocurre algo bueno con una actividad".
+Se enfoca en asegurarse de que los procesos no queden bloqueados (deadlocks) y que las actividades puedan avanzar y completarse.
+
+Una falla de vida indica que las cosas dejan de ejecutar.
+
+Ejemplos de vida: terminación, asegurar que un pedido de servicio será atendido, 
+que un mensaje llega a destino, que un proceso eventualmente alcanzará su SC, etc⇒ dependen de las políticas de scheduling
 
 
 13- ¿Qué es una política de scheduling? Relacione con fairness. ¿Qué tipos de fairnes conoce? 
@@ -257,6 +268,12 @@ alcanzará su SC, etc  dependen de las políticas de scheduling.
 Una política de scheduling se refiere a un conjunto de reglas o algoritmos utilizados para determinar el orden en el que los procesos o tareas deben ser programados para su ejecución en un sistema concurrente o multiprocesador. 
 Estas políticas de scheduling se utilizan para gestionar la asignación de recursos del sistema (como la CPU) a procesos o hilos, con el objetivo de lograr una ejecución eficiente y equitativa de las tareas.
 
+
+Fairness se relaciona con la equidad en la ejecución de procesos o hilos en un sistema concurrente. 
+Se esfuerza por garantizar que todos los procesos tengan la oportunidad de avanzar y realizar sus operaciones, 
+evitando situaciones de bloqueo o inanición.
+Fairness trata de garantizar que los procesos tengan chance de avanzar, 
+sin importar lo que hagan los demás, es decir, que se ejecuten acciones atómicas de todos lo procesos.
 
 Fairness Incondicional. 
 
@@ -282,3 +299,9 @@ Una política de scheduling es fuertemente fair si:
 (1) Es incondicionalmente fair y
 (2) Toda acción atómica condicional que se vuelve elegible eventualmente es
 ejecutada pues su guarda se convierte en true con infinita frecuencia.
+
+Fairness incondicional: significa que todas las tareas que están listas para ejecutarse eventualmente se ejecutan, sin importar si son condicionales o no.
+
+Fairness débil: significa que además de la fairness incondicional, las tareas condicionales que se vuelven elegibles se ejecutan, siempre y cuando su condición se mantenga verdadera hasta que la tarea sea asignada.
+
+Fairness fuerte: significa que además de la fairness incondicional, las tareas condicionales que se vuelven elegibles se ejecutan, incluso si su condición cambia de valor muchas veces.

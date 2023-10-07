@@ -10,15 +10,18 @@ diferentes políticas de scheduling pueden afectar la equidad y la capacidad de 
 procesos para avanzar y completar sus tareas.
 El concepto de fairness se puede aplicar al acceso a una base de datos compartida por
 n procesos concurrentes de la siguiente manera:
+
 Fairness Incondicional: En este contexto, significa garantizar que cada proceso tenga la
 oportunidad de acceder a la base de datos compartida en algún momento. Ningún
 proceso debería ser excluido indefinidamente del acceso a la base de datos.
+
 Fairness Débil: Además de garantizar el acceso a la base de datos, también implica
 asegurarse de que todos los procesos tengan la oportunidad de realizar operaciones en
 la base de datos, independientemente de sus condiciones o restricciones. Por ejemplo,
 si un proceso espera una condición específica para acceder a la base de datos, la
 política de scheduling debe garantizar que, si la condición se cumple, el proceso pueda
 acceder a la base de datos.
+
 Fairness Fuerte: Va un paso más allá y asegura que, si un proceso tiene una condición
 para acceder a la base de datos y esa condición se cumple en algún momento, el
 proceso obtendrá acceso a la base de datos con suficiente frecuencia, incluso si la
@@ -26,8 +29,10 @@ condición es rara.
 
 2- Dado el siguiente programa concurrente, indique cuál es la respuesta correcta
 (justifique claramente)
+
 int a = 1, b = 0;
 co await (b = 1) a = 0  // while (a = 1) { b = 1; b = 0; } oc
+
 a) Siempre termina
 b) Nunca termina
 c) Puede terminar o no → Esta es la respuesta correcta. En el caso que se ejecutara
@@ -42,13 +47,16 @@ programa terminara.
 en procesos concurrentes? ¿Cuáles de ellas son propiedades de seguridad y cuáles de
 vida? En el caso de las propiedades de seguridad, ¿cuál es en cada caso el estado
 “malo” que se debe evitar?
+
 Propiedades de Seguridad (Safety):
 Exclusión Mutua: Garantiza que, como máximo, un proceso está en su sección crítica
 en un momento dado. Se debe evitar que dos o más procesos estén simultáneamente
 en la misma sección crítica. El estado "malo" a evitar es cuando múltiples procesos
 intentan ejecutar la sección crítica al mismo tiempo, lo que podría causar conflictos y
 resultados incorrectos.
+
 Propiedades de Vida (Liveness):
+  
 Ausencia de Deadlock (Livelock): Garantiza que, si dos o más procesos intentan entrar
 en sus secciones críticas, al menos uno de ellos tendrá éxito. Se debe evitar que un
 proceso espere indefinidamente a que se libere un recurso que nunca se libera porque
@@ -93,6 +101,7 @@ process coordinador{
  }
 }
 
+
 5- ¿Qué mejoras introducen los algoritmos Tie-breaker, Ticket o Bakery en relación a las
 soluciones de tipo spin-locks?
 
@@ -102,6 +111,7 @@ Los algoritmos Tie-breaker, Ticket y Bakery introducen mejoras al proporcionar e
 en la asignación de recursos y prevenir la inanición de procesos.
 6- Analice las soluciones para las barreras de sincronización desde el punto de vista de
 la complejidad de la programación y de la performance.
+
 En las barreras que involucran un coordinador, se añade la necesidad de un proceso
 adicional, lo que implica un costo adicional tanto en términos de recursos de
 procesamiento como de tiempo de ejecución el cual es proporcional a n. Estas barreras
@@ -111,6 +121,7 @@ coordinador y los trabajadores no tiene un impacto significativo en comparación
 tiempo de espera. Sin embargo, a medida que el número de procesos aumenta, el
 coordinador puede convertirse en un cuello de botella, lo que podría afectar de
 manera negativa el rendimiento global del sistema.
+
 Una posible solución al problema de rendimiento de la barrera en donde se tiene un
 coordinador es combinar las acciones de Workers y Coordinador, haciendo que cada
 Worker sea también Coordinador. En estos casos se tienen Workers en forma de árbol
