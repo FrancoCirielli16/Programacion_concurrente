@@ -10,37 +10,41 @@ parte de la enfermera correspondiente.
 
 
 sem mutex = 1;
+sem esperando = 0;
+sem [1..150] pasar = ([150],0)
+sem [1..150] retirarse = ([150],0)
 
+Cola cola[1..3];
 array contador[1..3] = ([3],0)
 
 
 
-Process Enfermera[id:1..3]{
-    P(esperando);
-    P(mutex);
-    id = cola.pop();
-    contador[id]--;
-    V(mutex);
-    V(pasar[id]);
-    Hisopar(id);
-    V(retirarse[id]); 
-}
 
+Process Enfermera[id:1..3]{
+    while true{
+        P(esperando); // Espero que alla gente 
+        P(mutex);
+        id_persona = cola.pop(); //Me fijo quien es el que tengo que hacer pasar
+        contador[id]--; //Resto la cantidad de gente esperando
+        V(mutex);
+        V(pasar[id_persona]); //  Lo hago pasar
+        Hisopar(id_persona); 
+        V(retirarse[id_persona]); //Le hago retirarse
+    }
+}
 
 Process pasajero[id:1..150]{
     
     P(mutex);
     puesto = min(contador); //obtengo el puesto con menos gente esperando
-    contador[puesto]++;
-    cola[puesto].push(id);
+    contador[puesto]++; //Aumento a la cantidad gente espernado
+    cola[puesto].push(id); // Me encolo
     V(mutex);
-    V(espernado);
-    P(pasar[id]);
+    V(espernado); //Aviso que llegue
+    P(pasar[id]); //Espero a pasar
     //Pasa a hisoparse
-    P(retirarse[id]);
-
-
-
+    P(retirarse[id]); //Espero que me digan que me puedo ir
+    //Se retira
 }
 
 

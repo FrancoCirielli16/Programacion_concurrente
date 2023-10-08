@@ -240,7 +240,7 @@ de entrar. La utilidad principal de esta técnica radica en garantizar que los p
 ejecuten de manera ordenada y sin interferencias entre ellos.
 
 
-11- Modifique las soluciones de Lectores-Escritores con semáforos de modo de no
+11- Modifique las soluciones de Lectores-Escritores con semáforos de modo de no  
 permitir más de 10 lectores simultáneos en la BD y además que no se admita el
 ingreso a más lectores cuando hay escritores esperando.
 Se debe reescribir en la primera condición de los lectores así
