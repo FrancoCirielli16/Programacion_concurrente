@@ -21,8 +21,9 @@ NOTA: sólo se pueden usar los procesos Persona; el uso del cajero por
 parte de una persona se simula llamando a la función UsarCajero().
 */
 
-
+  
 /*
+              
 Si valorás tu salud mental, no hagas este ejercicio. Yo te avisé.
 
 Resolver con SEMÁFOROS el siguiente problema. En una empresa hay UN
@@ -47,11 +48,12 @@ la elaboración de una unidad de un producto.
 
 
 /*
-Resolver con SEMÁFOROS el siguiente problema. Simular un examen
-técnico para concursos no-docentes en la Facultad, en el mismo
-participan 100 personas distribuidas en 4 concursos (25 personas
-en cada concurso) con un coordinador en cada una de ellos. Cada
-persona ya conoce en que concurso participa. El coordinador de
+Resolver con SEMÁFOROS el siguiente problema. 
+Simular un examen técnico para concursos no-docentes en la Facultad, 
+en el mismo participan 100 personas distribuidas en 4 concursos (25 personas
+en cada concurso) con un coordinador en cada una de ellos. 
+
+Cada persona ya conoce en que concurso participa. El coordinador de
 cada concurso espera hasta que lleguen las 25 personas
 correspondientes al mismo, les entrega el examen a resolver
 (el mismo para todos los de ese concurso), y luego corrige los
