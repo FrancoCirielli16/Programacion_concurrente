@@ -50,7 +50,40 @@ Procces CENTRAL{
 Existen N usuarios que solicitan acceder al Servidor, esperan hasta que se les de acceso para trabajar en él y luego salen del mismo.
 Nota: suponga que existe una función TrabajarEnServidor() que llaman los representar que están trabajando en el Servidor
 
-#OPCION A PREGUNTAR
+
+#OPCION 1
+
+Monitor Servidor {
+
+    int usuarios_actuales = 0;
+    cond espera;
+    libre = true
+
+    Procedure IngresarUsuario() {
+        while (usuarios_actuales == 10){
+            esperando++;
+            wait(espera);
+        }
+        usuarios_actuales++
+    }
+
+    Procedure SalirUsuario() {
+        usuarios_actuales--;
+        signal(espera);
+    }
+
+   
+}
+
+Process Usuario[id: 1..N] {
+    Servidor.IngresarUsuario();  
+    TrabajarEnServidor();      
+    Servidor.SalirUsuario();    
+}
+
+
+#OPCION 2
+
 
 
 Monitor Servidor {
@@ -89,5 +122,3 @@ Process Usuario[id: 1..N] {
     TrabajarEnServidor();      
     Servidor.SalirUsuario();    
 }
-
-

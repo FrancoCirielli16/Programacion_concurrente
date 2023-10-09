@@ -31,7 +31,7 @@ Procces Centrales[id:1..2]{
         P(mutex)
         id,temp = temp.pop()
         V(mutex)
-        accion[id] = determinar()
+        accion[id] = determinar(temp)
         V(comenzar[id])
     }
 }
@@ -215,3 +215,46 @@ Procces Auto[id:1..N]{
     pasar()
     Puente.Proximo()
 }
+
+
+
+Resolver con SEMÁFOROS el siguiente problema. En un restorán trabajan C cocineros y M mozos. De
+forma repetida, los cocineros preparan un plato y lo dejan listo en la bandeja de platos terminados, mientras
+que los mozos toman los platos de esta bandeja para repartirlos entre los comensales. Tanto los cocineros
+como los mozos trabajan de a un plato por vez. Modele el funcionamiento del restorán considerando que la
+bandeja de platos listos puede almacenar hasta P platos. No es necesario modelar a los comensales ni que
+los procesos terminen
+
+
+Platos bandeja[1..P] = ([P],null)
+int ocupado,libre = 1
+sem platos = P
+sem HayPlato = 0
+sem mutexM,mutexC = 1
+
+Procces Cocinero[id:1..C]{
+    
+    while(true){
+        plato = CrearPlato()
+        P(platos)
+        P(MutexC)
+        bandeja[libre] = plato;
+        libre = (libre+1) mod P;
+        V(MutexC)
+        V(HayPlato)
+    }
+}
+
+
+Procces Mozo[id:1..M]{
+    while(true){
+        P(HayPlato)
+        P(mutexM)
+        plato = bandeja[ocupado];
+        ocupado = (ocupado + 1) mod P;
+        V(mutexM)
+        V(platos)
+        repartirlo(plato);
+    }
+}
+
