@@ -16,6 +16,8 @@ sem mutex[1..4] = ([4], 1)
 array contador[1..4] = ([4], 0)
 array colas[1..4];
 sem mutexcolas[1..4] = ([4],1)
+sem examen[1..4] = ([4],0)
+sem entregado[1..4] = ([4],0)
 
 Procces personas[id:1..100]{
     int Miconcurso;
@@ -33,7 +35,7 @@ Procces personas[id:1..100]{
     P(mutexcolas[Miconcurso])
     colas[Miconcurso].push(id)
     V(mutexcolas[Miconcurso])
-    V(entregado)
+    V(entregado[Miconcurso])
     P(esperandoNota[id])
 }
 
@@ -45,7 +47,7 @@ Procces coordinadores[id:1..4]{
 
     
     for i=0 i<25; i++ {
-        P(entregado)
+        P(entregado[id])
 
         P(mutexcolas[id])
         id_persona = colas[id].pop()
