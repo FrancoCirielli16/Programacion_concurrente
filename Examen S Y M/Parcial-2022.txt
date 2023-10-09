@@ -9,15 +9,18 @@ Los módulos atienden las mediciones por orden de llegada.
 Cola temp;
 sem mutex = 1
 sem pedido = 0
-
+array accion[1..15] = ([15],0)
+sem comenzar[1..15] = ([15],0)
+  
 Procces Sensores[id:1..15]{
     While true{
         temperatura = medir()
         P(mutex)
-        temp.push(determinar(temperatura))
+        temp.push(id,temperatura)
         V(mutex)
         V(pedido)
-        Delay(tiempo)
+        P(comenzar[id])
+        realizar(accion[id])
     }
 }
 
@@ -26,42 +29,13 @@ Procces Centrales[id:1..2]{
     While true{
         P(pedido)
         P(mutex)
-        acción = temp.pop()
+        id,temp = temp.pop()
         V(mutex)
-        realizar(acción)
+        accion[id] = determinar()
+        V(comenzar[id])
     }
 }
 
-#OPCION 2
-
-Cola temp;
-sem mutex = 1
-
-
-Procces Sensores[id:1..15]{
-    While true{
-        temperatura = medir()
-        P(mutex)
-        temp.push(id,determinar(temperatura))
-        V(mutex)
-      
-    }
-}
-
-
-Procces Centrales[id:1..2]{
-    While true{
-        P(mutex)
-        if(!isEmpty(temp)){
-            id,acción = temp.pop()
-            V(mutex)
-            realizar(id,acción)
-        }else{
-             V(mutex)
-        }
-        
-    }
-}
 
 
 2. MONITORES. 

@@ -13,7 +13,7 @@ terminar.
 sem todos[1..4] = ([4], 0)
 sem esperandoNota[1..100]
 sem mutex[1..4] = ([4], 1)
-array contador[1..4] = ([4], 0)
+array contador[1..4] = ([4], 0)    
 array colas[1..4];
 sem mutexcolas[1..4] = ([4],1)
 sem examen[1..4] = ([4],0)
