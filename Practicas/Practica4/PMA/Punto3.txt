@@ -1,0 +1,55 @@
+3. Se debe modelar el funcionamiento de una casa de comida rápida, en la cual trabajan 2
+cocineros y 3 vendedores, y que debe atender a C clientes. El modelado debe considerar
+que:
+- Cada cliente realiza un pedido y luego espera a que se lo entreguen.
+
+- Los pedidos que hacen los clientes son tomados por cualquiera de los vendedores y se
+lo pasan a los cocineros para que realicen el plato. Cuando no hay pedidos para atender,
+los vendedores aprovechan para reponer un pack de bebidas de la heladera (tardan entre
+1 y 3 minutos para hacer esto).
+
+- Repetidamente cada cocinero toma un pedido pendiente dejado por los vendedores, lo
+cocina y se lo entrega directamente al cliente correspondiente.
+Nota: maximizar la concurrencia.
+
+
+
+
+Process Cliente[id: 1..C]{
+    send Pedido(id,pedido)
+    receive Retirar[id](comida)
+}
+
+Process Cocinero[id:1..2]{
+    while(true){
+        receive Cocinero(idP);
+        generarComida(comida)
+        send Retirar[idP](comida)   
+    }
+}
+
+Process Vendedor[id:1..3]{
+    while(true){
+        send vendedor_libre(id)
+        receive Vendedor[id](idP)
+        if(idP == -1){
+            restock();
+        }
+        else{
+            send Cocinero(idP);
+        }
+    }
+}
+
+Process Coordinador{
+    while(true){
+        receive vendedor_libre(idV)
+        if(empty(Pedido)){
+            sig = -1;
+        }
+        else{
+            receive Pedido(sig);
+        }
+        send Vendedor[idV](sig)
+    }
+}

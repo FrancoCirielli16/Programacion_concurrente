@@ -1,0 +1,78 @@
+1. Suponga que N clientes llegan a la cola de un banco y que serán atendidos por sus
+empleados. Analice el problema y defina qué procesos, recursos y comunicaciones serán
+necesarios/convenientes para resolver el problema. Luego, resuelva considerando las
+siguientes situaciones:
+
+a. Existe un único empleado, el cual atiende por orden de llegada.
+chan Atendido[1..N](entero);
+chan CanalPersona(entero);
+
+Process Persona[id: 0..N-1]{ 
+    send CanalPersona[id]( id );
+    receive Atendido[id]();
+}
+
+Process Empleado{ 
+    int id;
+    for i=1; i<N; i++ {
+        receive Persona (id);
+        send Atendido[id]();
+    }
+}
+
+
+
+b. Ídem a) pero considerando que hay 2 empleados para atender, ¿qué debe
+modificarse en la solución anterior?
+
+Process Persona[id: 0..N-1]{ 
+    send CanalPersona[id]( id );
+    receive Atendido[id]();
+}
+
+Process Empleado[id: 0..2]{ 
+    int id;
+    while(true){
+        receive Persona (id);
+        send Atendido[id]();
+    }
+}
+
+c. Ídem b) pero considerando que, si no hay clientes para atender, los empleados
+realizan tareas administrativas durante 15 minutos. ¿Se puede resolver sin usar
+procesos adicionales? ¿Qué consecuencias implicaría
+
+chan CanalPersona(int);
+chan Pedido(int);
+chan Atendido[N](int);
+chan Siguiente[2](int);
+
+Process Coordinador{ 
+    int id
+    int idE;
+    while (true){ 
+        receive Pedido (idE);
+        if (empty (CanalPersona)) 
+            id = -1;
+        else
+            receive CanalPersona(id)
+        send Siguiente[idE] ( id );
+    };
+}
+
+Process Empleado[id: 0..1]{ 
+    int sig;
+    while (true){ 
+        send Pedido(id);
+        receive Siguiente[id]( sig );
+        if (sig <> -1) 
+            resolver (sig)
+        else 
+            delay (600); //lee 10 minutos
+    };
+}
+
+Process Persona[id: 0..N-1]{ 
+    send CanalPersona[id]( id );
+    receive Atendido[id]();
+}

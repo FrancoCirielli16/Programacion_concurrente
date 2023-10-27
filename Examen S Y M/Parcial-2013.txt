@@ -57,11 +57,9 @@ Monitor Servidor {
 
     int usuarios_actuales = 0;
     cond espera;
-    libre = true
 
     Procedure IngresarUsuario() {
         while (usuarios_actuales == 10){
-            esperando++;
             wait(espera);
         }
         usuarios_actuales++

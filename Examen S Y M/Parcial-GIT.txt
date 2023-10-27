@@ -115,7 +115,82 @@ orden de acuerdo a la gravedad de cada uno.
 Nota: maximizar la concurrencia.
 */
 
+Process Paciente[id:1..P]{
+    int gravedad = gravedad;
+    int med;
 
+    Guardia.acudir(gravedad, med);
+    Atencion[med].atenderse(id,gravedad);
+    
+}
+
+Process Enfermera{
+    for(int i=0; i < P; i++){
+        Guardia.determinar;
+    }
+}
+
+Monitor Guardia{
+    cond espera, llegada;
+    int grav;
+    int med;
+
+    Procedure acudir(var gravedad, var med){
+        signal(llegada);
+        wait(espera);
+        med = med;
+        gravedad = grav;
+    }
+
+    Procedure determinar(){
+        wait(llegada);
+        grav = asignarGravedad();
+        med = asignarMedico();
+        signal(espera);
+    }
+}
+
+
+Process Medico[id:1..5]{
+    while(True){
+        Atencion[id].atender;
+    }
+}
+
+
+Monitor Atencion[id:1..5]{
+  
+}
+
+Monitor administrarCola[id:1..5]{
+    cond cola[P];
+    colaOrdenada fila;
+    bool libre = True;
+    int espera = 0, idAux;
+
+    Procedure atenderse(id, gravedad){
+        if(!libre){
+            insertar(fila,id,gravedad);
+            espera++;
+            wait(cola[id]);
+        }
+        else{
+            libre = False;
+        }
+    }
+
+    Procedure atender(){
+        //Se atiende al paciente
+        if(espera > 0){
+            espera--;
+            idAux = sacar(fila);
+            signal(idAux);
+        }
+        else{
+            libre = True;
+        }
+    }
+}
 
 
 /*
@@ -128,3 +203,51 @@ que cada 3hs incrementa en 1 la prioridad de todas las personas que
 están esperando usar el equipo.
 NOTA: maximizar la concurrencia.
 */
+
+
+Procces Persona[id:1..P]{
+  numero 
+  EquipoVideo.utilizar(id,numero);
+  //utilizo la el equipo de la videoconferencia
+  EquipoVideo.termine();
+}
+
+Procces administrador{
+    while true {
+        delay(3h);
+        EquipoVideo.incrementar();
+    }
+}
+
+
+Monitor EquipoVideo{
+
+    Procedure utilizar(id,numero){
+        if(not libre){
+            esperando++
+            colaOrdenada.push(id,numero);     
+            wait(espera)
+        }
+        else{
+            libre = false;
+        }
+    }
+
+
+    Procedure termine(){
+      if(esperando>0){
+        esperando--
+        id,numero = colaOrdenada.Pop();
+        signal(espera[id]);
+      }
+      else{
+        libre = true;
+      }
+    }
+
+
+    Procedure incrementar(){
+      aumentarEnUno(colaOrdenada) //Esta funcion se encargaria de aumentar la prioridad en uno la de todos los que esten encolada
+    }
+
+}
