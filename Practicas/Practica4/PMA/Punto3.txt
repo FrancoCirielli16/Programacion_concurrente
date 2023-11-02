@@ -12,8 +12,11 @@ los vendedores aprovechan para reponer un pack de bebidas de la heladera (tardan
 cocina y se lo entrega directamente al cliente correspondiente.
 Nota: maximizar la concurrencia.
 
-
-
+chan Pedido(int,string)
+chan Cocinero(int)
+chan vendedor_libre(int)
+chan Vendedor[1..3](int)
+chan Retirar[1..C](string)
 
 Process Cliente[id: 1..C]{
     send Pedido(id,pedido)
@@ -23,15 +26,15 @@ Process Cliente[id: 1..C]{
 Process Cocinero[id:1..2]{
     while(true){
         receive Cocinero(idP);
-        generarComida(comida)
-        send Retirar[idP](comida)   
+        generarComida(comida);
+        send Retirar[idP](comida);   
     }
 }
 
 Process Vendedor[id:1..3]{
     while(true){
-        send vendedor_libre(id)
-        receive Vendedor[id](idP)
+        send vendedor_libre(id);
+        receive Vendedor[id](idP);
         if(idP == -1){
             restock();
         }

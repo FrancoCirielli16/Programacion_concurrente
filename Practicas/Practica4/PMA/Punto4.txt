@@ -5,3 +5,48 @@ atiende a los clientes en el orden en que hacen los pedidos, pero siempre dando 
 los que terminaron de usar la cabina. A cada cliente se le entrega un ticket factura. Nota:
 maximizar la concurrencia; suponga que hay una función Cobrar() llamada por el empleado
 que simula que el empleado le cobra al cliente.
+
+
+chan llegada(int)
+chan pagos(int,int)
+chan hayPedido(boolean)
+chan ticket[1..C](string)
+
+Process Cliente[id: 1..C]{
+    int cabina
+    string ticket
+    send llegada(id)
+    send hayPedido();
+    receive Cabina[id](cabina)
+    //usa cabina
+    send termine(id,cabina)
+    send hayPedido()
+    receive ticket[id](ticket)
+}
+
+Process Empleado{
+    int idCliente
+    boolean hay
+    int idCabina
+    Cola cabinas
+    
+    InicializarColaCabina(cabinas) //Carga la cola con las cabinas
+
+    while(true){
+        receive hayPedido(hay)
+        if(!pagos.isEmpty() || cabinas.isEmpty()){
+            receive pagos(idCliente,idCabina)
+            cabinas.push(idCabina)
+            send ticket[idCliente](Cobrar())
+        }
+        else{
+            receive llegada(idCliente)
+            send Cabina[idCliente](cabinas.pop())
+        }
+        
+
+    } 
+
+
+}
+

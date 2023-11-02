@@ -4,3 +4,38 @@ documentos a imprimir. Cada impresora, cuando está libre, toma un documento y l
 imprime, de acuerdo con el orden de llegada, pero siempre dando prioridad a los pedidos
 del director. Nota: los usuarios y el director no deben esperar a que se imprima el
 documento.
+
+
+chan pedido(boolean)
+chan imprimirUsuario(Documento)
+chan imprimirDirector(Documento)
+
+Process usuario[id:0..N-1] {
+	while (true) {
+		send imprimirUsuario(generarDocumento());
+		send pedido(true);
+	}
+}
+
+Process director{
+    while (true) {
+		send imprimirUsuario(generarDocumento());
+		send pedido(true);
+	}
+}
+
+Process impresora[id:1..3]{
+    boolean hay
+    Documento documentoUsuario,documentoDirecotor
+    while(True){
+        receive pedido(hay)
+        if(!imprimirDirector.isEmpty()){
+            receive imprimirDirector(documentoDirecotor)
+            imprimir(documentoDirecotor)
+        }
+        else{
+            receive imprimirUsuario(documentoUsuario)
+            imprimir(documentoUsuario)
+        }
+    }
+}
