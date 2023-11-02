@@ -42,6 +42,6 @@ rocess admin{
     ADN muestra
     do
         EmpleadoPreparador?ADN_muestras(muestra) --> muestras.push(muestra)
-        !muestras.isEmpty(); EmpleadoAnalisador?pedido() --> EmpleadoAnalisador?recepcion_muestras(pedidos.pop())
+        !muestras.isEmpty(); EmpleadoAnalisador?pedido() --> EmpleadoAnalisador!recepcion_muestras(pedidos.pop())
     od
 }
