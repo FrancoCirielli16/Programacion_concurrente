@@ -26,7 +26,7 @@ Process Encargado{
 Process Cordinador{
     Cola pedido_uso
     int id_persona
-    do Persona?llegue(id_persona) -->{
+    do Persona[*]?llegue(id_persona) -->{
         pedido_uso.push(id_persona);
     }
     [] !pedido_uso.isEmpty() Encargado?pedido()  --> {
