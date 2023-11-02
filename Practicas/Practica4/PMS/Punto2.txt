@@ -11,16 +11,17 @@ Process EmpleadoPreparador{
     ADN muestra;
     while(true){
         muestra = obtener_muestra();
-        EmpleadoArmador!muestra(muestra)
+        Admin!ADN_muestras(muestra);
     }
 }
 
 Process EmpleadoAnalisador{
     DNI muestra,set_analisis,resultado
     while(true){
-        EmpleadoPreparador?muestra(muestra);
+        Admin!pedido();
+        Admin?recepcion_muestras(muestra);
         set_analisis = armar_set(muestra);
-        EmpleadoAnalisador!Analizar(set_analisis);
+        EmpleadoArmador!Analizar(set_analisis);
         EmpleadoAnalisador?Resultado(resultado)
         archivar_resultado(resultado)
     }
@@ -33,4 +34,14 @@ Process EmpleadoArmador{
         resultado = generar_resultado(set_analisis)
         EmpleadoAnalisador!resultado(resultado)
     }
+}
+
+
+rocess admin{
+    Cola muestras
+    ADN muestra
+    do
+        EmpleadoPreparador?ADN_muestras(muestra) --> muestras.push(muestra)
+        !muestras.isEmpty(); EmpleadoAnalisador?pedido() --> EmpleadoAnalisador?recepcion_muestras(pedidos.pop())
+    od
 }
