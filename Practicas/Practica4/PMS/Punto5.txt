@@ -2,3 +2,35 @@
 E Espectadores de acuerdo al orden de llegada. Cuando el espectador accede a la máquina 
 en su turno usa la máquina y luego se retira para dejar al siguiente.  Nota: cada Espectador 
 una sólo una vez la máquina. 
+
+
+Process Espectador[id:1..P]{
+  Cordinador!llegue(id);
+  Turno?comenzar();
+  USAR_MAQUINA();
+  Turno!termine();
+
+}
+
+Process Turno{
+    int id_espect;
+    for(i=0; i<P; i++){
+        Cordinador!pedido()
+        Cordinador?siguiente(id_espect);
+        Persona[id_espect]!comenar();
+        Persona[id_espect]?termine();
+    }
+}
+
+
+Process Cordinador{
+    Cola pedido_uso
+    int id_espect
+    do Espectador?llegue(id_espect) -->{
+        pedido_uso.push(id_espect);
+    }
+    [] !pedido_uso.isEmpty() Turno?pedido()  --> {
+        Turno!siguiente(pedido_uso.pop)
+    }
+    od
+}
