@@ -1,14 +1,136 @@
 3.  En  un  examen  final  hay  N  alumnos  y  P  profesores.  Cada  alumno  resuelve  su  examen,  lo 
 entrega  y  espera  a  que  alguno  de  los  profesores  lo  corrija  y  le  indique  la  nota.  Los 
 profesores corrigen los exámenes respetando el orden en que los alumnos van entregando.  
-a) Considerando que P=1. 
+a) Considerando que P=1.
+
+
+Process Alumno[id:1..N]{
+   texto examen;
+   texto nota;
+   examen = resolver()
+   Cordinador!corregir(id,examen);
+   Profesor!resultado(nota)
+}
+
+Process Profesor{
+    texto examen,nota
+    int id_alumno
+    for(i=0; i<N; i++){
+        Cordinador!pedido();
+        Cordinador?correcion(id_alumno,examen)
+        nota = corregir(examen)
+        Alumno[id_alumno]!resultado(nota);
+    }
+
+}
+
+Process Coridnador{
+  cola examenes;
+  texto examen;
+  int id_alum, cant_alumnos_corregir = N
+  do {
+      Alumno[*]?corregir(id_alum,examen);
+      examenes.push(id,examen);
+      cant_alumnos_corregir--;
+ }
+ [] !examenes.isEmpty() Profesor[*]?pedido()--> {
+    examenes.pop(id_alum,examen)
+    Profesor!correcion(id,examen)
+ }
+}
+
+
 b) Considerando que P>1. 
+
+Process Alumno[id:1..P]{
+   texto examen;
+   texto nota;
+   examen = resolver()
+   Cordinador!corregir(id,examen);
+   Profesor!resultado(nota)
+}
+
+Process Profesor[id:1..P]{
+    texto examen,nota
+    int id_alumno
+    for(i=0; i<N; i++){
+        Cordinador!pedido(id);
+        Cordinador?correcion(id_alumno,examen)
+        nota = corregir(examen)
+        Alumno[id_alumno]!resultado(nota);
+    }
+
+}
+
+Process COridnador{
+  cola examenes;
+  texto examen;
+  int id_alum, id_profesor ,cant_alumnos_corregir = N
+  do{
+      Alumno[*]?corregir(id_alum,examen);
+      examenes.push(id,examen);
+      cant_alumnos_corregir--;
+ }
+ [] !examenes.isEmpty() Profesor[*]?pedido(id_profesor) --> {
+    examenes.pop(id_alum,examen)
+    Profesor[id_profesor]!correcion(id,examen)
+ }
+}
+
+
+
 c) Ídem  b)  pero  considerando  que  los  alumnos  no  comienzan  a  realizar  su  examen  hasta 
 que todos hayan llegado al aula. 
 Nota: maximizar la concurrencia y no generar demora innecesaria. 
  
 
  
+Process Alumno[id:1..P]{
+   texto examen;
+   texto nota;
+
+   Cordinador!llegue()
+   Cordinador?comenzar()
+   examen = resolver()
+   Cordinador!corregir(id,examen);
+   Profesor!resultado(nota)
+}
+
+Process Profesor[id:1..P]{
+    texto examen,nota
+    int id_alumno
+    for(i=0; i<N; i++){
+        Cordinador!pedido(id);
+        Cordinador?correcion(id_alumno,examen)
+        nota = corregir(examen)
+        Alumno[id_alumno]!resultado(nota);
+    }
+
+}
+
+Process COridnador{
+  cola examenes;
+  texto examen;
+  int id_alum, id_profesor ,cant_alumnos_corregir = N
+
+  for(i=0; i<N; i++){
+      Alumno[*]?llegue();
+  }
+  for(i=0; i<N; i++){
+      Alumno[i]!comenzar();
+  }
+
+  do
+    cant_alumnos_corregir > 0 --> {
+      Alumno[*]?corregir(id_alum,examen);
+      examenes.push(id,examen);
+      cant_alumnos_corregir--;
+ }
+ [] !examenes.isEmpty() Profesor[*]?pedido(id_profesor) --> {
+    examenes.pop(id_alum,examen)
+    Profesor[id_profesor]!correcion(id,examen)
+ }
+}
 
  
  
