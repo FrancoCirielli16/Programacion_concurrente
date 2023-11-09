@@ -3,3 +3,34 @@ exclusión  mutua)  y  un  empleado  encargado  de  administrar  su  uso.  Hay  
 esperan  a  que  el  empleado  lo  deje  acceder  al  simulador,  lo  usa  por  un  rato  y  se  retira.  El 
 empleado  deja  usar  el simulador  a  las  personas  respetando  el  orden  de  llegada.  Nota: cada 
 persona usa sólo una vez el simulador.   
+
+Process Persona[id:1..P]{
+  Cordinador!llegue(id);
+  Encargado?comenzar();
+  USAR_SIMULADOR();
+  Encargado!termine();
+
+}
+
+Process Encargado{
+    int id_persona;
+    for(i=0; i<P; i++){
+        Cordinador!pedido()
+        Cordinador?siguiente(id_persona);
+        Persona[id_persona]!comenar();
+        Persona[id_persona]?termine();
+    }
+}
+
+
+Process Cordinador{
+    Cola pedido_uso
+    int id_persona
+    do Persona[*]?llegue(id_persona) -->{
+        pedido_uso.push(id_persona);
+    }
+    [] !pedido_uso.isEmpty() Encargado?pedido()  --> {
+        Encargado!siguiente(pedido_uso.pop)
+    }
+    od
+}

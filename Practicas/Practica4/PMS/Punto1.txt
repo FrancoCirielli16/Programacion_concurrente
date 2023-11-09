@@ -16,6 +16,7 @@ process Analizador {
   texto direccion;
   bolean sitio_es_malicioso;
   while (true) {
+    Admin!pedido();
     Examinador[*]?sitio(direccion);
     sitio_es_malicioso = examinar_sitio(direccion);
   }
@@ -30,4 +31,11 @@ process Examinador[id:0..R-1] {
 }
 
 
-
+process admin{
+    Cola pedidos
+    texto direccion
+    do
+        Examinador[*]?sitio(direccion) --> pedidos.push(direccion)
+        !pedidos.isEmpty(); Analizador?pedido() --> Analizador!sitio(pedidos.pop())
+    od
+}
