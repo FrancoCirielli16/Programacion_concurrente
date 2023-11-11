@@ -34,6 +34,10 @@ de desarrollo, aplicaciones.
 - [Clase 3 - Sincronización por Variables Compartidas](Teorias/Clase-3---Programacin-Concurrente---2023--Clase.pdf/)
 - [Clase 4 - Semáforos](Teorias/Clase-4---Programacin-Concurrente---2023--Clase.pdf/)
 - [Clase 5 - Monitores](Teorias/Clase-5---Programacin-Concurrente---2023--Clase.pdf/)
+- [Clase 6 - Monitores](Teorias/Clase-5---Programacin-Concurrente---2023--Clase.pdf/)
+- [Clase 7 - Monitores](Teorias/Clase-5---Programacin-Concurrente---2023--Clase.pdf/)
+- [Clase 8 - Monitores](Teorias/Clase-5---Programacin-Concurrente---2023--Clase.pdf/)
+
 
 <h2>Cuestionarios</h2>
 
@@ -54,3 +58,6 @@ de desarrollo, aplicaciones.
 - [Variables Compartidas](Practicas/Practica1)
 - [Semaforos](Practicas/Practica2)
 - [Monitores](Practicas/Practica3)
+- [PMA](Practicas/Practica4/PMA/)
+- [PMS](Practicas/Practica4/PMS/)
+- [ADA](Practicas/Practica5)

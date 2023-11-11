@@ -1,0 +1,4 @@
+Parcial de Concurrente 2014 – 1ra Fecha
+2 - Resolver con PMA el siguiente problema. En un gimnasio hay tres máquinas iguales que pueden ser utilizadas para hacer ejercicio o rehabilitación. 
+Hay E personas que quieren usar cualquiera de esas máquinas para hacer ejercicio, y R personas que las quieren usar para hacer rehabilitación. 
+Siempre tienen prioridad aquellas que la quieran usar para realizar rehabilitación. Cuando una persona toma una máquina la usa por 10 minutos y se retira.

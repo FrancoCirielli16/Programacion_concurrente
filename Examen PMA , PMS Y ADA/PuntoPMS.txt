@@ -1,0 +1,15 @@
+2 - 
+Resolver con PMS el siguiente problema: Se debe administrar el acceso para usar en determinado Servidor donde no se permite más de 10 usuarios trabajando al mismo tiempo, por cuestiones de rendimiento. 
+Existen N usuarios que solicitan acceder al Servidor, esperan hasta que se les de acceso para trabajar en él y luego salen del mismo.
+Nota: suponga que existe una función TrabajarEnServidor() que llaman los usuarios para representar que están trabajando en el Servidor
+
+
+
+2- Resolver con PASAJE DE MENSAJES SINCRÓNICO (PMS). 
+En una estación de comunicaciones se cuenta con 10 Radares, UNA Unidad de Detección, y UN Reconocedor. 
+Cada radar repetidamente detecta señales de radio durante 15 segundos y le envía esos datos a la Unidad de Detección para que los analice. 
+Los radares no deben esperar ningún resultado (deben volver a tomar señales lo antes posible). 
+La Unidad de Detección, toma de a una las señales enviadas por los radares (según el orden de llegada), 
+realiza un preprocesamiento para limpiar la señal (simular esta operación mediante la función PREPROCESAR(señal)) 
+y envía el resultado al Reconocedor para que termine de analizar la señal (simular esta operación mediante la función ANALIZAR(señal)) 
+y se queda esperando el resultado de este análisis para determinar el resultado final. Nota: Maximizar la concurrencia.
