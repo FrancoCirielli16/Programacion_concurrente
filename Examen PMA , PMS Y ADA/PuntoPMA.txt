@@ -1,4 +1,52 @@
+
+
 Parcial de Concurrente 2014 – 1ra Fecha
-2 - Resolver con PMA el siguiente problema. En un gimnasio hay tres máquinas iguales que pueden ser utilizadas para hacer ejercicio o rehabilitación. 
+1 - Resolver con PMA el siguiente problema. En un gimnasio hay tres máquinas iguales que pueden ser utilizadas para hacer ejercicio o rehabilitación. 
 Hay E personas que quieren usar cualquiera de esas máquinas para hacer ejercicio, y R personas que las quieren usar para hacer rehabilitación. 
 Siempre tienen prioridad aquellas que la quieran usar para realizar rehabilitación. Cuando una persona toma una máquina la usa por 10 minutos y se retira.
+
+
+
+chan llegue_persona(int);
+chan llegue_persona_r(int);
+chan usar_maquina(boolean);
+chan usarM_P[1..P]()
+chan usarM_R[1..R]()
+
+
+Process Persona[id:1..P]{
+    
+    send llegue_persona(id);
+    send usar_maquina();
+    receive usarM_P[id] 
+
+}
+
+Process Persona_rehabilitacion[id: 1..R]{
+    send llegue_persona_r(id);
+    send usar_maquina();
+    receive usarM_R[id]
+}
+
+Process Coordinador{
+    
+    while true{
+        receive usar_maquina();
+        if(!Empty(llegue_persona_r)){
+            receive llegue_persona_r()
+        }
+        else{
+            receive llegue_persona()
+            
+        }
+    }
+    
+}
+
+
+2. Resolver con PMA el siguiente problema. Se debe modelar el funcionamiento de una casa de venta de repuestos 
+automotores, en la que trabajan V vendedores y que debe atender a C clientes. El modelado debe considerar que: 
+(a) cada cliente realiza un pedido y luego espera a que se lo entreguen; y (b) los pedidos que hacen los clientes son 
+tomados por cualquiera de los vendedores. Cuando no hay pedidos para atender, los vendedores aprovechan para 
+controlar el stock de los repuestos (tardan entre 2 y 4 minutos para hacer esto). Nota: maximizar la concurrencia.  
+ 
