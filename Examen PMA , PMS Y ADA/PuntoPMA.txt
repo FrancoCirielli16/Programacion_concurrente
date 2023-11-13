@@ -9,44 +9,144 @@ Siempre tienen prioridad aquellas que la quieran usar para realizar rehabilitaci
 
 chan llegue_persona(int);
 chan llegue_persona_r(int);
-chan usar_maquina(boolean);
-chan usarM_P[1..P]()
-chan usarM_R[1..R]()
+chan usar_maquina();
+chan usarM_P[1..P](int)
+chan usarM_R[1..R](int)
+chan Termine(int)
 
 
 Process Persona[id:1..P]{
     
     send llegue_persona(id);
     send usar_maquina();
-    receive usarM_P[id] 
+    receive usarM_P[id](idMaquina)
+    DELAY(60*10); //USA MAQUINA
+    send Termine(idMaquina);
+    send usar_maquina();
 
 }
 
 Process Persona_rehabilitacion[id: 1..R]{
     send llegue_persona_r(id);
     send usar_maquina();
-    receive usarM_R[id]
+    receive usarM_R[id](idMaquina)
+    DELAY(60*10); //USA MAQUINA
+    send Termine(idMaquina);
+    send usar_maquina();
+    
 }
 
+
 Process Coordinador{
-    
+    idP,idPR:int
+    maquinas_libres[1..3] = ([3],0) //si es 1 esta en uso
     while true{
+        
         receive usar_maquina();
-        if(!Empty(llegue_persona_r)){
-            receive llegue_persona_r()
+
+        if (!Empty(Termine))or(maquinasEnUso = 3){
+            receive Termine(idMaquina);
+            maquinas_libres[idMaquina] = 0;
+            maquinasEnUso--
         }
-        else{
-            receive llegue_persona()
+        if(!Empty(llegue_persona_r)){
+            receive llegue_persona_r(idPR);
+            idMaquina = ObtenerMaquinaLibre(maquinas_libres);
+            send usarM_R[idPR](idMaquina);
+            maquinas_libres[idMaquina]++;
+            maquinasEnUso++;
+        }
+        elif(!Empty(llegue_persona)){
+            receive llegue_persona(idP);
+            idMaquina = ObtenerMaquinaLibre(maquinas_libres);
+            send usarM_P[idPR](idMaquina);
+            maquinas_libres[idMaquina]++;
+            maquinasEnUso++;
             
         }
     }
-    
 }
 
 
-2. Resolver con PMA el siguiente problema. Se debe modelar el funcionamiento de una casa de venta de repuestos 
-automotores, en la que trabajan V vendedores y que debe atender a C clientes. El modelado debe considerar que: 
-(a) cada cliente realiza un pedido y luego espera a que se lo entreguen; y (b) los pedidos que hacen los clientes son 
+Process Coordinador2{
+    idP,idPR:int
+    maquinasEnUso = 0;
+    maquinas_libres[1..3] = ([3],0) //si es 1 esta en uso
+    while true{
+        receive usar_maquina();
+        if (!Empty(Termine)) = >
+            receive Termine(idMaquina);
+            maquinas_libres[idMaquina] = 0;
+            maquinasEnUso--
+        [](maquinasEnUso<3)and(!Empty(llegue_persona_r)) => 
+            receive llegue_persona_r(idPR);
+            idMaquina = ObtenerMaquinaLibre(maquinas_libres);
+            send usarM_R[idPR](idMaquina);
+            maquinas_libres[idMaquina]++;
+            maquinasEnUso++;
+        [](maquinasEnUso<3)and(!Empty(llegue_persona)) =>
+            receive llegue_persona(idP);
+            idMaquina = ObtenerMaquinaLibre(maquinas_libres);
+            send usarM_P[idPR](idMaquina);
+            maquinas_libres[idMaquina]++;
+            maquinasEnUso++;
+        }
+
+    }
+   
+
+
+
+2. Resolver con PMA el siguiente problema. 
+
+Se debe modelar el funcionamiento de una casa de venta de repuestos automotores, en la que trabajan V vendedores y que debe atender a C clientes. 
+
+
+El modelado debe considerar que: 
+
+(a) cada cliente realiza un pedido y luego espera a que se lo entreguen; 
+y (b) los pedidos que hacen los clientes son 
 tomados por cualquiera de los vendedores. Cuando no hay pedidos para atender, los vendedores aprovechan para 
 controlar el stock de los repuestos (tardan entre 2 y 4 minutos para hacer esto). Nota: maximizar la concurrencia.  
  
+
+chan Vendedor[1..V](int)
+chan HayPedido(int)
+chan recibir[1..C](String)
+chan vendedor_libre(int)
+
+Procedure vendedores[id:1..V]{
+    idSig : integer;
+    pedido:string;
+
+    send vendedor_libre(id);
+    receive Vendedor[id](idSig);
+    if(idSig = -1){
+        DELAY(60*Random(2..4));
+    }
+    else{
+        pedido = generarPedido(idSig)
+        send recibir[idSig](pedido)
+    }
+}
+
+
+Procedure cliente[id:1..C]{
+    send HayPedido(id);
+    receive recibir[id](pedido)
+}
+
+
+Procedure Coordinador{
+    idVendendor : integer;
+    sig : integer;
+    while true {
+            receive vendedor_libre(idVendendor);
+            if(empty(HayPedido)){
+                sig = -1
+            }else{
+                receive HayPedido(sig)
+            }
+            send Vendedor[idVendendor](sig) 
+    }
+}

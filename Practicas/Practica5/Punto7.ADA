@@ -40,6 +40,7 @@ procedure policía is
                 Servidor(i).recibirHuella(test);
             end loop;
             
+            
             for i in 8 loop;
                 accept recibirSimilitud(valor IN integer, codigo: IN integer) do
                     if(valorMax<valor)then
